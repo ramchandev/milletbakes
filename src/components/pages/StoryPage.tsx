@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LOGO_SRC } from "@/lib/site";
 
 export default function StoryPage() {
   return (
@@ -12,7 +13,8 @@ export default function StoryPage() {
 {/* Decorative faint warm glow */}
 <div className="absolute -top-24 right-0 w-96 h-96 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
 <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-<div className="max-w-3xl">
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+<div className="lg:col-span-7 max-w-3xl">
 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container border border-outline-variant/40 mb-6">
 <span className="material-symbols-outlined text-secondary text-sm fill">spa</span>
 <span className="font-headline uppercase text-[11px] font-extrabold tracking-widest text-primary-container">Handcrafted in Chennai</span>
@@ -40,6 +42,19 @@ export default function StoryPage() {
 <div className="flex flex-col">
 <span className="font-headline text-2xl md:text-3xl font-bold text-tertiary-container">Fresh</span>
 <span className="text-xs uppercase font-semibold text-outline tracking-wider">Small-Batch Baked</span>
+</div>
+</div>
+</div>
+<div className="lg:col-span-5 flex justify-center lg:justify-end">
+<div className="relative w-56 sm:w-72 lg:w-80 xl:w-[22rem] aspect-square flex items-center justify-center">
+<div className="absolute inset-6 rounded-full bg-secondary-container/25 blur-2xl pointer-events-none" />
+<div className="relative w-full h-full rounded-full bg-surface-container-lowest/80 border border-outline-variant/40 warm-card-shadow flex items-center justify-center p-8 md:p-10">
+<img
+                alt="Millet Bakes logo"
+                className="w-full h-full object-contain"
+                src={LOGO_SRC}
+              />
+</div>
 </div>
 </div>
 </div>

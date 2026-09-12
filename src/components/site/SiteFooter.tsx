@@ -91,7 +91,7 @@ export function SiteFooter() {
         </div>
         <div className="pt-8 border-t border-outline/20 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-body text-on-primary-container/70 mt-10">
           <p>
-            © 2025 Millet Bakes. Pure Millet &amp; Jaggery Craft. All rights reserved. • Website
+            © {new Date().getFullYear()} Millet Bakes. Pure Millet &amp; Jaggery Craft. All rights reserved. • Website
             Design By{" "}
             <a
               className="underline underline-offset-2 hover:text-primary-fixed transition-colors duration-200"

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { HAMPER_KEYS } from "@/lib/catalog";
 import { useCart } from "@/lib/cart-context";
 import { emailLead } from "@/lib/submit-lead-client";
-import { formatINR, openWhatsApp } from "@/lib/site";
+import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
 
 export default function HomePage() {
   const cart = useCart();
@@ -40,9 +40,13 @@ export default function HomePage() {
       window.alert("Please add at least one delicious bake to your order!");
       return;
     }
+    if (!isValidPhone(cart.phone)) {
+      window.alert("Please enter a valid WhatsApp / phone number.");
+      return;
+    }
     const name = customerName || "Valued Customer";
     const packagingLabel = packaging === "tin" ? "Festive Tin" : "Artisanal Kraft Bakery Box";
-    const message = `*Hello Millet Bakes!* I would like to place a handcrafted fresh order:\n\n• Ragi Chocolate Cookies: ${qty.ragi} box(es)\n• Millet Granola Jar: ${qty.granola} jar(s)\n• Wellness Snack Hamper: ${qty.wellness} box(es)\n\n*Customer Name:* ${name}\n*Delivery Route:* ${destination}\n*Gift Note:* ${note || "None"}\n*Packaging:* ${packagingLabel}\n*Estimated Value:* ${formatINR(hamperTotal)}\n\nPlease share payment details and fresh dispatch schedule. Thank you!`;
+    const message = `*Hello Millet Bakes!* I would like to place a handcrafted fresh order:\n\n• Ragi Chocolate Cookies: ${qty.ragi} box(es)\n• Millet Granola Jar: ${qty.granola} jar(s)\n• Wellness Snack Hamper: ${qty.wellness} box(es)\n\n*Customer Name:* ${name}\n*Phone / WhatsApp:* ${cart.phone}\n*Delivery Route:* ${destination}\n*Gift Note:* ${note || "None"}\n*Packaging:* ${packagingLabel}\n*Estimated Value:* ${formatINR(hamperTotal)}\n\nPlease share payment details and fresh dispatch schedule. Thank you!`;
 
     setSending(true);
     try {
@@ -51,6 +55,7 @@ export default function HomePage() {
         subject: `Website order — ${name}`,
         fields: {
           Customer: name,
+          Phone: cart.phone,
           "Ragi chocolate cookies": `${qty.ragi} box(es)`,
           "Millet granola jar": `${qty.granola} jar(s)`,
           "Wellness snack hamper": `${qty.wellness} box(es)`,
@@ -483,10 +488,14 @@ export default function HomePage() {
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div>
-<label className="block font-label-md text-label-md text-primary mb-1">Recipient Name &amp; Contact</label>
+<label className="block font-label-md text-label-md text-primary mb-1">Recipient Name</label>
 <input className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm" placeholder="Your Name or Recipient" type="text" value={customerName} onChange={(event) => setCustomerName(event.target.value)} />
 </div>
 <div>
+<label className="block font-label-md text-label-md text-primary mb-1">Phone / WhatsApp <span className="text-error">*</span></label>
+<input className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm" inputMode="tel" placeholder="+91 98765 43210" required type="tel" value={cart.phone} onChange={(event) => cart.setPhone(event.target.value)} />
+</div>
+<div className="md:col-span-2">
 <label className="block font-label-md text-label-md text-primary mb-1">Delivery Destination</label>
 <select className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm" value={destination} onChange={(event) => setDestination(event.target.value)}>
 <option value="Chennai Local (Same-Day / Next-Day)">Chennai Local (Same-Day / Next-Day Delivery)</option>
@@ -537,10 +546,13 @@ export default function HomePage() {
 </div>
 {/* Order Capture Action */}
 <div className="space-y-3 pt-2">
-<button className="w-full py-4 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md active:scale-98 disabled:opacity-60" disabled={sending} onClick={() => dispatchWhatsAppOrder()}>
+<button className="w-full py-4 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md active:scale-98 disabled:opacity-60 disabled:cursor-not-allowed" disabled={sending || !isValidPhone(cart.phone) || qty.ragi + qty.granola + qty.wellness === 0} onClick={() => dispatchWhatsAppOrder()}>
 <span className="material-symbols-outlined text-xl" data-icon="send">send</span>
 <span className="">{sending ? "Sending…" : "Place Order via WhatsApp"}</span>
 </button>
+{!isValidPhone(cart.phone) ? (
+<p className="text-center font-label-stamp text-label-stamp text-secondary">Enter a valid phone number to place the order.</p>
+) : null}
 <p className="text-center font-label-stamp text-label-stamp text-on-surface-variant uppercase tracking-wider">
               Direct DM: +91 63831 00431 / @millet_bakes
             </p>

@@ -39,6 +39,10 @@ export const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
+export function isValidPhone(value: string) {
+  return value.replace(/\D/g, "").length >= 10;
+}
+
 export function formatINR(value: number) {
   return `₹${value.toLocaleString("en-IN")}`;
 }

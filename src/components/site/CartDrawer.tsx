@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
 import { emailLead } from "@/lib/submit-lead-client";
-import { formatINR, openWhatsApp } from "@/lib/site";
+import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
 
 export function CartDrawer() {
-  const { items, subtotal, packaging, drawerOpen, closeDrawer, changeQty } = useCart();
+  const { items, subtotal, packaging, phone, setPhone, drawerOpen, closeDrawer, changeQty } = useCart();
   const [sending, setSending] = useState(false);
   const activeItems = items.filter((item) => item.qty > 0);
   const total = subtotal + packaging.cost;
@@ -16,12 +16,16 @@ export function CartDrawer() {
       window.alert("Please add at least one delicious bake to your order!");
       return;
     }
+    if (!isValidPhone(phone)) {
+      window.alert("Please enter a valid WhatsApp / phone number.");
+      return;
+    }
 
     const lines = activeItems
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
     const estimated = formatINR(total);
-    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Packaging:* ${packaging.label} (+${formatINR(packaging.cost)})\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
+    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${phone}\n*Packaging:* ${packaging.label} (+${formatINR(packaging.cost)})\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
 
     setSending(true);
     try {
@@ -30,6 +34,7 @@ export function CartDrawer() {
         subject: "Website cart order",
         fields: {
           Items: lines,
+          Phone: phone,
           Packaging: `${packaging.label} (+${formatINR(packaging.cost)})`,
           "Estimated total": estimated,
         },
@@ -119,10 +124,22 @@ export function CartDrawer() {
               <span>Total Value</span>
               <span className="font-bold text-xl">{formatINR(total)}</span>
             </div>
+            <div>
+              <label className="block font-label-md text-label-md text-primary mb-1">Phone / WhatsApp <span className="text-error">*</span></label>
+              <input
+                className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm"
+                inputMode="tel"
+                placeholder="+91 98765 43210"
+                required
+                type="tel"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+              />
+            </div>
             <button
               type="button"
-              className="w-full py-3.5 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-md text-label-md font-bold flex items-center justify-center gap-2 disabled:opacity-60"
-              disabled={sending}
+              className="w-full py-3.5 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-md text-label-md font-bold flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={sending || !isValidPhone(phone) || activeItems.length === 0}
               onClick={checkout}
             >
               <span className="material-symbols-outlined text-sm">send</span>

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useCart } from "@/lib/cart-context";
 import { emailLead } from "@/lib/submit-lead-client";
-import { formatINR, openWhatsApp } from "@/lib/site";
+import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
 
 export default function ShopPage() {
   const cart = useCart();
@@ -26,11 +26,15 @@ export default function ShopPage() {
       window.alert("Your basket is empty. Please select baked treats to proceed!");
       return;
     }
+    if (!isValidPhone(cart.phone)) {
+      window.alert("Please enter a valid WhatsApp / phone number.");
+      return;
+    }
     const lines = activeItems
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
     const total = formatINR(cart.subtotal + cart.packaging.cost);
-    const message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Packaging:* ${cart.packaging.label} (+${formatINR(cart.packaging.cost)})\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${total}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
+    const message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${cart.phone}\n*Packaging:* ${cart.packaging.label} (+${formatINR(cart.packaging.cost)})\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${total}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
 
     setSending(true);
     try {
@@ -39,6 +43,7 @@ export default function ShopPage() {
         subject: "Website pantry order",
         fields: {
           Items: lines,
+          Phone: cart.phone,
           Packaging: `${cart.packaging.label} (+${formatINR(cart.packaging.cost)})`,
           Delivery: delivery,
           Notes: notes || "None",
@@ -401,6 +406,10 @@ export default function ShopPage() {
 </div>
 {/* Delivery Destination Selector */}
 <div className="pt-2">
+<label className="block text-xs font-headline font-bold text-primary mb-1.5">Phone / WhatsApp <span className="text-error">*</span></label>
+<input className="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0 placeholder:text-outline/70" inputMode="tel" placeholder="+91 98765 43210" required type="tel" value={cart.phone} onChange={(event) => cart.setPhone(event.target.value)} />
+</div>
+<div className="pt-2">
 <label className="block text-xs font-headline font-bold text-primary mb-1.5">Delivery Destination</label>
 <select className="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0" value={delivery} onChange={(event) => setDelivery(event.target.value)}>
 <option value="Chennai Express (Same Day / ₹80)">Chennai Local Express (Same-Day / Next-Day)</option>
@@ -434,10 +443,13 @@ export default function ShopPage() {
 </div>
 </div>
 {/* WhatsApp Primary CTA Action Button */}
-<button className="w-full mt-5 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-4 rounded-full font-label font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md active:scale-98 group disabled:opacity-60" disabled={sending} onClick={() => dispatchWhatsAppOrder()}>
+<button className="w-full mt-5 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-4 rounded-full font-label font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md active:scale-98 group disabled:opacity-60 disabled:cursor-not-allowed" disabled={sending || !isValidPhone(cart.phone) || activeItems.length === 0} onClick={() => dispatchWhatsAppOrder()}>
 <span className="material-symbols-outlined text-[20px] text-tertiary-fixed group-hover:scale-110 transition-transform">chat</span>
 <span className="">{sending ? "Sending…" : "Complete Order via WhatsApp"}</span>
 </button>
+{!isValidPhone(cart.phone) ? (
+<p className="text-[10px] text-center text-secondary mt-2 font-body">Enter a valid phone number to complete the order.</p>
+) : null}
 <p className="text-[10px] text-center text-outline mt-2 font-body">Instant baker confirmation • Direct UPI payment via WhatsApp</p>
 {/* Baker Support Direct Contact */}
 <div className="mt-4 p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-center gap-2 text-[11px] text-on-surface-variant">

@@ -1,19 +1,51 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { emailLead } from "@/lib/submit-lead-client";
 import { openWhatsApp } from "@/lib/site";
 
 export default function ContactPage() {
   const [openFaq, setOpenFaq] = useState(0);
+  const [sending, setSending] = useState(false);
 
-  function submitInquiry(event: FormEvent<HTMLFormElement>) {
+  async function submitInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    openWhatsApp(
-      `*Contact Inquiry - Millet Bakes*\n\nName: ${data.get("full_name")}\nEmail: ${data.get("email")}\nPhone: ${data.get("phone")}\nDate: ${data.get("delivery_date") || "Flexible"}\nType: ${data.get("inquiry_type")}\nMessage: ${data.get("message")}`,
-    );
-    window.alert("Thank you for reaching out to Millet Bakes! Master Baker Santhiya will connect with you shortly on WhatsApp/Email.");
-    event.currentTarget.reset();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get("full_name") || "");
+    const email = String(data.get("email") || "");
+    const phone = String(data.get("phone") || "");
+    const date = String(data.get("delivery_date") || "Flexible");
+    const type = String(data.get("inquiry_type") || "");
+    const message = String(data.get("message") || "");
+    const preferences = data.getAll("preference").map(String).join(", ") || "None";
+
+    setSending(true);
+    try {
+      await emailLead({
+        type: "inquiry",
+        subject: `Inquiry: ${type || "Millet Bakes"} — ${name}`,
+        replyTo: email,
+        fields: {
+          Name: name,
+          Email: email,
+          Phone: phone,
+          "Delivery / event date": date,
+          "Inquiry type": type,
+          "Dietary preferences": preferences,
+          Message: message,
+        },
+      });
+      openWhatsApp(
+        `*Contact Inquiry - Millet Bakes*\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nDate: ${date}\nType: ${type}\nPreferences: ${preferences}\nMessage: ${message}`,
+      );
+      window.alert("Thank you for reaching out to Millet Bakes! Master Baker Santhiya will connect with you shortly on WhatsApp/Email.");
+      form.reset();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Could not send the inquiry. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -256,8 +288,8 @@ export default function ContactPage() {
 </div>
 {/* Submit CTA Button */}
 <div className="pt-2">
-<button className="w-full bg-primary hover:bg-primary-container text-white py-3.5 px-8 rounded-full font-label font-bold text-sm tracking-wide shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
-<span className="">Send Inquiry</span>
+<button className="w-full bg-primary hover:bg-primary-container text-white py-3.5 px-8 rounded-full font-label font-bold text-sm tracking-wide shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60" disabled={sending} type="submit">
+<span className="">{sending ? "Sending…" : "Send Inquiry"}</span>
 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
 </button>
 <p className="font-body text-center text-xs text-outline mt-3">

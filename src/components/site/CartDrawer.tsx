@@ -1,14 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
+import { emailLead } from "@/lib/submit-lead-client";
 import { formatINR, openWhatsApp } from "@/lib/site";
 
 export function CartDrawer() {
   const { items, subtotal, packaging, drawerOpen, closeDrawer, changeQty } = useCart();
+  const [sending, setSending] = useState(false);
   const activeItems = items.filter((item) => item.qty > 0);
   const total = subtotal + packaging.cost;
 
-  function checkout() {
+  async function checkout() {
     if (activeItems.length === 0) {
       window.alert("Please add at least one delicious bake to your order!");
       return;
@@ -17,11 +20,27 @@ export function CartDrawer() {
     const lines = activeItems
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
+    const estimated = formatINR(total);
+    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Packaging:* ${packaging.label} (+${formatINR(packaging.cost)})\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
 
-    openWhatsApp(
-      `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Packaging:* ${packaging.label} (+${formatINR(packaging.cost)})\n*Estimated Total:* ${formatINR(total)}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`,
-    );
-    closeDrawer();
+    setSending(true);
+    try {
+      await emailLead({
+        type: "order",
+        subject: "Website cart order",
+        fields: {
+          Items: lines,
+          Packaging: `${packaging.label} (+${formatINR(packaging.cost)})`,
+          "Estimated total": estimated,
+        },
+      });
+      openWhatsApp(message);
+      closeDrawer();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Could not send the order email. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   if (!drawerOpen) return null;
@@ -102,11 +121,12 @@ export function CartDrawer() {
             </div>
             <button
               type="button"
-              className="w-full py-3.5 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-md text-label-md font-bold flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-md text-label-md font-bold flex items-center justify-center gap-2 disabled:opacity-60"
+              disabled={sending}
               onClick={checkout}
             >
               <span className="material-symbols-outlined text-sm">send</span>
-              <span>Checkout on WhatsApp</span>
+              <span>{sending ? "Sending…" : "Checkout on WhatsApp"}</span>
             </button>
           </div>
         </div>

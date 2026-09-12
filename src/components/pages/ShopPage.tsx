@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useCart } from "@/lib/cart-context";
+import { emailLead } from "@/lib/submit-lead-client";
 import { formatINR, openWhatsApp } from "@/lib/site";
 
 export default function ShopPage() {
@@ -9,6 +10,7 @@ export default function ShopPage() {
   const [category, setCategory] = useState("all");
   const [delivery, setDelivery] = useState("Chennai Express (Same Day / ₹80)");
   const [notes, setNotes] = useState("");
+  const [sending, setSending] = useState(false);
   const activeItems = cart.items.filter((item) => item.qty > 0);
   const visibleCount = useMemo(() => {
     const counts = { cookies: 1, granola: 1, cakes: 2, hampers: 2, all: 6 } as const;
@@ -19,7 +21,7 @@ export default function ShopPage() {
     cart.addItem(name, price, spec);
   }
 
-  function dispatchWhatsAppOrder() {
+  async function dispatchWhatsAppOrder() {
     if (activeItems.length === 0) {
       window.alert("Your basket is empty. Please select baked treats to proceed!");
       return;
@@ -27,9 +29,28 @@ export default function ShopPage() {
     const lines = activeItems
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
-    openWhatsApp(
-      `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Packaging:* ${cart.packaging.label} (+${formatINR(cart.packaging.cost)})\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${formatINR(cart.subtotal + cart.packaging.cost)}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`,
-    );
+    const total = formatINR(cart.subtotal + cart.packaging.cost);
+    const message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Packaging:* ${cart.packaging.label} (+${formatINR(cart.packaging.cost)})\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${total}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
+
+    setSending(true);
+    try {
+      await emailLead({
+        type: "order",
+        subject: "Website pantry order",
+        fields: {
+          Items: lines,
+          Packaging: `${cart.packaging.label} (+${formatINR(cart.packaging.cost)})`,
+          Delivery: delivery,
+          Notes: notes || "None",
+          "Estimated total": total,
+        },
+      });
+      openWhatsApp(message);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Could not send the order email. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -413,9 +434,9 @@ export default function ShopPage() {
 </div>
 </div>
 {/* WhatsApp Primary CTA Action Button */}
-<button className="w-full mt-5 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-4 rounded-full font-label font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md active:scale-98 group" onClick={() => dispatchWhatsAppOrder()}>
+<button className="w-full mt-5 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-4 rounded-full font-label font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md active:scale-98 group disabled:opacity-60" disabled={sending} onClick={() => dispatchWhatsAppOrder()}>
 <span className="material-symbols-outlined text-[20px] text-tertiary-fixed group-hover:scale-110 transition-transform">chat</span>
-<span className="">Complete Order via WhatsApp</span>
+<span className="">{sending ? "Sending…" : "Complete Order via WhatsApp"}</span>
 </button>
 <p className="text-[10px] text-center text-outline mt-2 font-body">Instant baker confirmation • Direct UPI payment via WhatsApp</p>
 {/* Baker Support Direct Contact */}

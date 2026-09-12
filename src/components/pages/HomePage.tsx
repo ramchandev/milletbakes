@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { HAMPER_KEYS } from "@/lib/catalog";
 import { useCart } from "@/lib/cart-context";
+import { emailLead } from "@/lib/submit-lead-client";
 import { formatINR, openWhatsApp } from "@/lib/site";
 
 export default function HomePage() {
@@ -13,6 +14,7 @@ export default function HomePage() {
   const [destination, setDestination] = useState("Chennai Local (Same-Day / Next-Day)");
   const [packaging, setPackaging] = useState("kraft");
   const [filter, setFilter] = useState("All Delights");
+  const [sending, setSending] = useState(false);
 
   const hamperTotal = useMemo(
     () => qty.ragi * 280 + qty.granola * 350 + qty.wellness * 650 + (packaging === "tin" ? 90 : 0),
@@ -32,16 +34,38 @@ export default function HomePage() {
     else cart.addItem(itemName, price);
   }
 
-  function dispatchWhatsAppOrder() {
+  async function dispatchWhatsAppOrder() {
     const totalUnits = qty.ragi + qty.granola + qty.wellness;
     if (totalUnits === 0) {
       window.alert("Please add at least one delicious bake to your order!");
       return;
     }
     const name = customerName || "Valued Customer";
-    openWhatsApp(
-      `*Hello Millet Bakes!* I would like to place a handcrafted fresh order:\n\n• Ragi Chocolate Cookies: ${qty.ragi} box(es)\n• Millet Granola Jar: ${qty.granola} jar(s)\n• Wellness Snack Hamper: ${qty.wellness} box(es)\n\n*Customer Name:* ${name}\n*Delivery Route:* ${destination}\n*Gift Note:* ${note || "None"}\n*Packaging:* ${packaging === "tin" ? "Festive Tin" : "Artisanal Kraft Bakery Box"}\n*Estimated Value:* ${formatINR(hamperTotal)}\n\nPlease share payment details and fresh dispatch schedule. Thank you!`,
-    );
+    const packagingLabel = packaging === "tin" ? "Festive Tin" : "Artisanal Kraft Bakery Box";
+    const message = `*Hello Millet Bakes!* I would like to place a handcrafted fresh order:\n\n• Ragi Chocolate Cookies: ${qty.ragi} box(es)\n• Millet Granola Jar: ${qty.granola} jar(s)\n• Wellness Snack Hamper: ${qty.wellness} box(es)\n\n*Customer Name:* ${name}\n*Delivery Route:* ${destination}\n*Gift Note:* ${note || "None"}\n*Packaging:* ${packagingLabel}\n*Estimated Value:* ${formatINR(hamperTotal)}\n\nPlease share payment details and fresh dispatch schedule. Thank you!`;
+
+    setSending(true);
+    try {
+      await emailLead({
+        type: "order",
+        subject: `Website order — ${name}`,
+        fields: {
+          Customer: name,
+          "Ragi chocolate cookies": `${qty.ragi} box(es)`,
+          "Millet granola jar": `${qty.granola} jar(s)`,
+          "Wellness snack hamper": `${qty.wellness} box(es)`,
+          Packaging: packagingLabel,
+          "Delivery route": destination,
+          "Gift note": note || "None",
+          "Estimated value": formatINR(hamperTotal),
+        },
+      });
+      openWhatsApp(message);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Could not send the order email. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -513,9 +537,9 @@ export default function HomePage() {
 </div>
 {/* Order Capture Action */}
 <div className="space-y-3 pt-2">
-<button className="w-full py-4 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md active:scale-98" onClick={() => dispatchWhatsAppOrder()}>
+<button className="w-full py-4 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md active:scale-98 disabled:opacity-60" disabled={sending} onClick={() => dispatchWhatsAppOrder()}>
 <span className="material-symbols-outlined text-xl" data-icon="send">send</span>
-<span className="">Place Order via WhatsApp</span>
+<span className="">{sending ? "Sending…" : "Place Order via WhatsApp"}</span>
 </button>
 <p className="text-center font-label-stamp text-label-stamp text-on-surface-variant uppercase tracking-wider">
               Direct DM: +91 63831 00431 / @millet_bakes

@@ -1,26 +1,54 @@
 "use client";
 
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
+import { emailLead } from "@/lib/submit-lead-client";
 import { openWhatsApp } from "@/lib/site";
 
 export default function CorporatePage() {
-  function submitInquiry(event: FormEvent<HTMLFormElement>) {
+  const [sending, setSending] = useState(false);
+
+  async function submitInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const company = String(data.get("companyName") || "");
     const person = String(data.get("contactPerson") || "");
     const email = String(data.get("workEmail") || "");
     const phone = String(data.get("phone") || "");
     const teamSize = String(data.get("teamSize") || "");
     const workshopType = String(data.get("workshopType") || "");
-    const date = String(data.get("tentativeDate") || "");
+    const date = String(data.get("tentativeDate") || "Flexible");
     const city = String(data.get("locationCity") || "");
-    const notes = String(data.get("customRequests") || "");
-    openWhatsApp(
-      `*Corporate Inquiry - Millet Bakes*\n\nCompany: ${company}\nContact: ${person}\nEmail: ${email}\nPhone: ${phone}\nTeam Size: ${teamSize}\nOffering: ${workshopType}\nDate: ${date || "Flexible"}\nLocation: ${city}\nNotes: ${notes || "None"}\n\nPlease share workshop availability and a tasting proposal.`,
-    );
-    window.alert("Thank you! Your corporate inquiry has been submitted. Our team will contact you shortly.");
-    event.currentTarget.reset();
+    const notes = String(data.get("customRequests") || "None");
+
+    setSending(true);
+    try {
+      await emailLead({
+        type: "corporate",
+        subject: `Corporate booking: ${company} — ${workshopType || "Inquiry"}`,
+        replyTo: email,
+        fields: {
+          Company: company,
+          "Contact person": person,
+          Email: email,
+          Phone: phone,
+          "Team size": teamSize,
+          Offering: workshopType,
+          Date: date,
+          Location: city,
+          Notes: notes,
+        },
+      });
+      openWhatsApp(
+        `*Corporate Inquiry - Millet Bakes*\n\nCompany: ${company}\nContact: ${person}\nEmail: ${email}\nPhone: ${phone}\nTeam Size: ${teamSize}\nOffering: ${workshopType}\nDate: ${date}\nLocation: ${city}\nNotes: ${notes}\n\nPlease share workshop availability and a tasting proposal.`,
+      );
+      window.alert("Thank you! Your corporate inquiry has been submitted. Our team will contact you shortly.");
+      form.reset();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Could not send the inquiry. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -595,8 +623,8 @@ export default function CorporatePage() {
 </div>
 {/* Submit CTA */}
 <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-<button className="w-full sm:w-auto px-10 py-4 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container hover:text-primary-fixed transition-all active:scale-[0.98] shadow-md" type="submit">
-                Submit Corporate Request
+<button className="w-full sm:w-auto px-10 py-4 rounded-full bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container hover:text-primary-fixed transition-all active:scale-[0.98] shadow-md disabled:opacity-60" disabled={sending} type="submit">
+                {sending ? "Sending…" : "Submit Corporate Request"}
               </button>
 <span className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5">
 <span className="material-symbols-outlined text-[16px] text-secondary">lock</span>

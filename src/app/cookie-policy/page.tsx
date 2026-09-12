@@ -38,6 +38,15 @@ export default function Page() {
           </p>
         </section>
         <section>
+          <h2 className="font-headline font-bold text-xl text-primary mb-3">Analytics</h2>
+          <p>
+            When Google Analytics 4 is enabled, Google may set analytics cookies to measure visits,
+            popular pages, and how shoppers move through the storefront. This helps us improve the
+            site. We do not use GA4 for advertising remarketing. You can block analytics cookies
+            in your browser or with a tracking-protection extension.
+          </p>
+        </section>
+        <section>
           <h2 className="font-headline font-bold text-xl text-primary mb-3">Third-party services</h2>
           <p>
             If you tap WhatsApp, Instagram, or phone links, those services apply their own cookies

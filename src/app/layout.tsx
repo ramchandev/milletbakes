@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Epilogue, Plus_Jakarta_Sans } from "next/font/google";
+import { GoogleAnalytics } from "@/components/site/GoogleAnalytics";
 import { JsonLd } from "@/components/site/JsonLd";
 import { Providers } from "@/components/site/Providers";
+import { getGaMeasurementId } from "@/lib/analytics";
 import {
   bakeryJsonLd,
   organizationJsonLd,
@@ -56,6 +58,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const gaMeasurementId = getGaMeasurementId();
+
   return (
     <html
       lang="en-IN"
@@ -63,6 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${epilogue.variable} ${plusJakarta.variable} scroll-smooth h-full`}
     >
       <body className="min-h-full bg-background text-on-surface font-body-md antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+        <GoogleAnalytics measurementId={gaMeasurementId} />
         <JsonLd data={organizationJsonLd()} />
         <JsonLd data={bakeryJsonLd()} />
         <JsonLd data={websiteJsonLd()} />

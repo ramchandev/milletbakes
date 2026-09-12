@@ -29,13 +29,8 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const STARTER_ITEMS: CartItem[] = PRODUCTS.slice(0, 3).map((product, index) => ({
-  ...product,
-  qty: index === 2 ? 0 : 1,
-}));
-
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>(STARTER_ITEMS);
+  const [items, setItems] = useState<CartItem[]>([]);
   const [packaging, setPackagingState] = useState({
     label: "Eco Kraft Box",
     cost: 0,
@@ -56,18 +51,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setQty = useCallback((id: string, qty: number) => {
-    setItems((current) =>
-      current.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(0, qty) } : item,
-      ),
-    );
+    const nextQty = Math.max(0, qty);
+    setItems((current) => {
+      const existing = current.find((item) => item.id === id);
+      if (!existing) {
+        const product = PRODUCTS.find((item) => item.id === id);
+        if (!product || nextQty === 0) return current;
+        return [...current, { ...product, qty: nextQty }];
+      }
+      if (nextQty === 0) {
+        return current.filter((item) => item.id !== id);
+      }
+      return current.map((item) =>
+        item.id === id ? { ...item, qty: nextQty } : item,
+      );
+    });
   }, []);
 
   const changeQty = useCallback((id: string, delta: number) => {
     setItems((current) =>
-      current.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(0, item.qty + delta) } : item,
-      ),
+      current.flatMap((item) => {
+        if (item.id !== id) return [item];
+        const nextQty = Math.max(0, item.qty + delta);
+        return nextQty === 0 ? [] : [{ ...item, qty: nextQty }];
+      }),
     );
   }, []);
 

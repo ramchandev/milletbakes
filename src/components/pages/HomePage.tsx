@@ -7,7 +7,7 @@ import { formatINR, openWhatsApp } from "@/lib/site";
 
 export default function HomePage() {
   const cart = useCart();
-  const [qty, setQty] = useState({ ragi: 1, granola: 1, wellness: 0 });
+  const [qty, setQty] = useState({ ragi: 0, granola: 0, wellness: 0 });
   const [note, setNote] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [destination, setDestination] = useState("Chennai Local (Same-Day / Next-Day)");

@@ -4,10 +4,9 @@ export const SITE_DESCRIPTION =
   "Handcrafted millet cookies, granola jars, cakes, and wellness hampers baked to order in Ayanavaram, Chennai with sprouted ancient grains and country palm jaggery. Zero maida, zero refined sugar.";
 
 export const SITE_URL = (
+  process.env.SITE_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000")
+  "https://www.milletbakes.in"
 ).replace(/\/$/, "");
 
 export const WHATSAPP_NUMBER = "916383100431";

@@ -11,6 +11,9 @@ export const SITE_URL = (
 
 export const WHATSAPP_NUMBER = "916383100431";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+export const HEADER_WHATSAPP_MESSAGE =
+  "Hi, I saw your products in milletbakes.in, I would like to place order, Can you help with that?\n-Thanks";
+export const HEADER_WHATSAPP_HREF = `${WHATSAPP_URL}?text=${encodeURIComponent(HEADER_WHATSAPP_MESSAGE)}`;
 export const INSTAGRAM_URL = "https://instagram.com/millet_bakes";
 export const BIZYSITE_URL = "https://www.bizysite.in";
 export const INSTAGRAM_HANDLE = "@millet_bakes";

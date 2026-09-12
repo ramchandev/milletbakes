@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
-import { LOGO_SRC, NAV_LINKS, WHATSAPP_URL } from "@/lib/site";
+import { HEADER_WHATSAPP_HREF, LOGO_SRC, NAV_LINKS } from "@/lib/site";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -70,7 +70,7 @@ export function SiteHeader() {
             </span>
           </button>
           <a
-            href={WHATSAPP_URL}
+            href={HEADER_WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full font-medium text-sm shadow-sm hover:shadow transition-all active:scale-95"

@@ -19,6 +19,7 @@ export default function ShopPage() {
 
   function addToCart(name: string, price: number, spec: string) {
     cart.addItem(name, price, spec);
+    cart.openDrawer();
   }
 
   async function dispatchWhatsAppOrder() {

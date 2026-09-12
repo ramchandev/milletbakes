@@ -32,6 +32,7 @@ export default function HomePage() {
     else if (itemName.includes("Granola")) updateQty("granola", 1);
     else if (itemName.includes("Wellness")) updateQty("wellness", 1);
     else cart.addItem(itemName, price);
+    cart.openDrawer();
   }
 
   async function dispatchWhatsAppOrder() {
@@ -206,12 +207,12 @@ export default function HomePage() {
               Crunchy outside, wholesome inside. Made with pure sprouted ragi flour and rich dark cocoa, sweetened with organic jaggery.
             </p>
 </div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
 <span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
 <span className="font-title-lg text-xl text-primary font-bold">₹280</span>
 </div>
-<button className="px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Ragi Chocolate Cookies', 280)}>
+<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Ragi Chocolate Cookies', 280)}>
 <span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
 <span className="">Add to Order</span>
 </button>
@@ -240,12 +241,12 @@ export default function HomePage() {
               Everyday energy packed with roasted almonds, melon seeds, sprouted foxtail millets, and gentle jaggery crunch.
             </p>
 </div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
 <span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
 <span className="font-title-lg text-xl text-primary font-bold">₹350</span>
 </div>
-<button className="px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Artisanal Millet Granola Jar', 350)}>
+<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Artisanal Millet Granola Jar', 350)}>
 <span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
 <span className="">Add to Order</span>
 </button>
@@ -274,12 +275,12 @@ export default function HomePage() {
               Wholesome bites for evening cravings. Includes millet crackers, mini cookie packs, and roasted spiced nut clusters.
             </p>
 </div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
 <span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
 <span className="font-title-lg text-xl text-primary font-bold">₹650</span>
 </div>
-<button className="px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Evening Wellness Snacks Box', 650)}>
+<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Evening Wellness Snacks Box', 650)}>
 <span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
 <span className="">Add to Order</span>
 </button>
@@ -308,12 +309,12 @@ export default function HomePage() {
               Moist, rich, artisanal chocolate indulgence made with sprouted ragi flour and slow-simmered palm jaggery ganache.
             </p>
 </div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
 <span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
 <span className="font-title-lg text-xl text-primary font-bold">₹850</span>
 </div>
-<button className="px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Decadent Millet Chocolate Fudge Cake', 850)}>
+<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Decadent Millet Chocolate Fudge Cake', 850)}>
 <span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
 <span className="">Add to Order</span>
 </button>
@@ -342,12 +343,12 @@ export default function HomePage() {
               Rustic sponge baked with golden foxtail millet, crowned with crisp toasted almonds, lightly infused with cardamom.
             </p>
 </div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
 <span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
 <span className="font-title-lg text-xl text-primary font-bold">₹420</span>
 </div>
-<button className="px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Roasted Almond Millet Tea Cake', 420)}>
+<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Roasted Almond Millet Tea Cake', 420)}>
 <span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
 <span className="">Add to Order</span>
 </button>

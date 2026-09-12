@@ -8,7 +8,6 @@ export const contentType = OG_CONTENT_TYPE;
 
 const DETAILS = [
   "Hands-on millet baking workshops",
-  "Employee wellness masterclasses",
   "Branded festive & onboarding hampers",
   "Teams of 12–60+ · Chennai & pan-India",
 ];
@@ -22,7 +21,8 @@ export default async function CorporateOpenGraphImage() {
         logoSrc={logoSrc}
         stamp="Corporate Workshops & Wellness Gifting"
         title="Bake together. Gift with purpose."
-        titleSize={52}
+        titleSize={48}
+        cta="Book a workshop →"
         footerLeft="Zero maida · Palm jaggery · Small-batch"
         footerRight="milletbakes.in/corporate"
       >
@@ -35,8 +35,7 @@ export default async function CorporateOpenGraphImage() {
             maxWidth: 680,
           }}
         >
-          Team culinary experiences and artisan gift tins from Millet Bakes —
-          ancient-grain recipes led from our Chennai kitchen.
+          Team baking experiences and artisan gift tins from our Chennai kitchen.
         </div>
         <div
           style={{

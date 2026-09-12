@@ -15,6 +15,7 @@ export default async function OpenGraphImage() {
         stamp="Ayanavaram, Chennai"
         title="Millet Bakes"
         titleSize={80}
+        cta="Order now on WhatsApp →"
         footerLeft="Palm jaggery · Ancient grains"
         footerRight="milletbakes.in"
       >

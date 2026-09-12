@@ -16,6 +16,7 @@ type OgFrameProps = {
   title: string;
   titleSize?: number;
   children: ReactNode;
+  cta: string;
   footerLeft: string;
   footerRight: string;
 };
@@ -26,6 +27,7 @@ export function OgFrame({
   title,
   titleSize = 72,
   children,
+  cta,
   footerLeft,
   footerRight,
 }: OgFrameProps) {
@@ -85,6 +87,22 @@ export function OgFrame({
             {title}
           </div>
           {children}
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+              marginTop: 8,
+              background: "#974723",
+              color: "#ffffff",
+              padding: "14px 32px",
+              borderRadius: 999,
+              fontSize: 24,
+              fontWeight: 800,
+              letterSpacing: 0.4,
+            }}
+          >
+            {cta}
+          </div>
         </div>
         <div
           style={{

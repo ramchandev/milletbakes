@@ -57,32 +57,41 @@ export const FAQS = [
 export const ROUTES = [
   {
     path: "/",
-    title: `${SITE_NAME} | ${SITE_TAGLINE}`,
-    description: SITE_DESCRIPTION,
+    title: "Millet Bakes | Pure Millet & Jaggery Bakery",
+    description:
+      "Handcrafted millet cookies, granola, cakes, and hampers baked to order in Ayanavaram, Chennai. Zero maida, zero refined sugar.",
+    ogDescription:
+      "Millet cookies, granola, cakes, and hampers from Chennai. Zero maida. Order on WhatsApp.",
     changeFrequency: "weekly" as const,
     priority: 1,
   },
   {
     path: "/shop",
-    title: "Shop Millet Cookies, Granola, Cakes & Hampers",
+    title: "Shop Millet Cookies, Cakes & Hampers",
     description:
-      "Order ragi chocolate cookies, millet granola, tea cakes, and wellness hampers from Millet Bakes. Same-day Chennai delivery, Kodambakkam studio pickup, and pan-India courier.",
+      "Order ragi cookies, millet granola, tea cakes, and wellness hampers. Same-day Chennai delivery and pan-India courier.",
+    ogDescription:
+      "Shop ragi cookies, granola, cakes, and hampers. Order on WhatsApp for Chennai delivery.",
     changeFrequency: "weekly" as const,
     priority: 0.9,
   },
   {
     path: "/corporate",
-    title: "Corporate Millet Baking Workshops & Wellness Gifting",
+    title: "Corporate Workshops & Wellness Gifting",
     description:
-      "Book hands-on millet baking workshops and branded wellness hampers for Chennai and pan-India teams. Ancient-grain team experiences led by Millet Bakes.",
+      "Book millet baking workshops and branded wellness hampers for teams in Chennai and across India.",
+    ogDescription:
+      "Hands-on millet workshops and branded team hampers. Book a corporate bake today.",
     changeFrequency: "monthly" as const,
     priority: 0.8,
   },
   {
     path: "/our-story",
-    title: "Our Story — Santhiya Karthikeyan & Ancient Grain Baking",
+    title: "Our Story — Ancient Grain Baking",
     description:
-      "Meet founder Santhiya Karthikeyan and the Ayanavaram kitchen behind Millet Bakes: sprouted ragi, foxtail millet, and palm jaggery in place of maida and refined sugar.",
+      "Meet founder Santhiya Karthikeyan and the Ayanavaram kitchen behind Millet Bakes: millets and palm jaggery, never maida.",
+    ogDescription:
+      "Santhiya Karthikeyan’s Chennai bakery: sprouted millets and palm jaggery, never maida.",
     changeFrequency: "monthly" as const,
     priority: 0.7,
   },
@@ -187,6 +196,10 @@ export function pageMetadata(
 
   const url = absoluteUrl(path);
   const isHome = path === "/";
+  const socialDescription =
+    "ogDescription" in route && route.ogDescription
+      ? route.ogDescription
+      : route.description;
 
   return {
     title: isHome
@@ -199,14 +212,14 @@ export function pageMetadata(
       type: "website",
       url,
       title: isHome ? route.title : `${route.title} | ${SITE_NAME}`,
-      description: route.description,
+      description: socialDescription,
       siteName: SITE_NAME,
       locale: "en_IN",
     },
     twitter: {
       card: "summary_large_image",
       title: isHome ? route.title : `${route.title} | ${SITE_NAME}`,
-      description: route.description,
+      description: socialDescription,
     },
     ...extras,
   };

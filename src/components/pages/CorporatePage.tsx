@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { CORPORATE_HANDOFF_KEY, storeLeadHandoff } from "@/lib/lead-handoff";
 import { emailLead } from "@/lib/submit-lead-client";
-import { openWhatsApp } from "@/lib/site";
 
 export default function CorporatePage() {
+  const router = useRouter();
   const [sending, setSending] = useState(false);
 
   async function submitInquiry(event: FormEvent<HTMLFormElement>) {
@@ -20,6 +22,17 @@ export default function CorporatePage() {
     const date = String(data.get("tentativeDate") || "Flexible");
     const city = String(data.get("locationCity") || "");
     const notes = String(data.get("customRequests") || "None");
+    const fields = {
+      Company: company,
+      "Contact person": person,
+      Email: email,
+      Phone: phone,
+      "Team size": teamSize,
+      Offering: workshopType,
+      Date: date,
+      Location: city,
+      Notes: notes,
+    };
 
     setSending(true);
     try {
@@ -27,23 +40,13 @@ export default function CorporatePage() {
         type: "corporate",
         subject: `Corporate booking: ${company} — ${workshopType || "Inquiry"}`,
         replyTo: email,
-        fields: {
-          Company: company,
-          "Contact person": person,
-          Email: email,
-          Phone: phone,
-          "Team size": teamSize,
-          Offering: workshopType,
-          Date: date,
-          Location: city,
-          Notes: notes,
-        },
+        fields,
       });
-      openWhatsApp(
-        `*Corporate Inquiry - Millet Bakes*\n\nCompany: ${company}\nContact: ${person}\nEmail: ${email}\nPhone: ${phone}\nTeam Size: ${teamSize}\nOffering: ${workshopType}\nDate: ${date}\nLocation: ${city}\nNotes: ${notes}\n\nPlease share workshop availability and a tasting proposal.`,
-      );
-      window.alert("Thank you! Your corporate inquiry has been submitted. Our team will contact you shortly.");
-      form.reset();
+      storeLeadHandoff(CORPORATE_HANDOFF_KEY, {
+        fields,
+        message: `*Corporate Inquiry - Millet Bakes*\n\nCompany: ${company}\nContact: ${person}\nEmail: ${email}\nPhone: ${phone}\nTeam Size: ${teamSize}\nOffering: ${workshopType}\nDate: ${date}\nLocation: ${city}\nNotes: ${notes}\n\nPlease share workshop availability and a tasting proposal.`,
+      });
+      router.push("/corporate-thankyou");
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "Could not send the inquiry. Please try again.");
     } finally {

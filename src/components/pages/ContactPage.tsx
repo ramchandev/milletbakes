@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { INQUIRY_HANDOFF_KEY, storeLeadHandoff } from "@/lib/lead-handoff";
 import { emailLead } from "@/lib/submit-lead-client";
-import { openWhatsApp } from "@/lib/site";
 
 export default function ContactPage() {
+  const router = useRouter();
   const [openFaq, setOpenFaq] = useState(0);
   const [sending, setSending] = useState(false);
 
@@ -19,6 +21,15 @@ export default function ContactPage() {
     const type = String(data.get("inquiry_type") || "");
     const message = String(data.get("message") || "");
     const preferences = data.getAll("preference").map(String).join(", ") || "None";
+    const fields = {
+      Name: name,
+      Email: email,
+      Phone: phone,
+      "Delivery / event date": date,
+      "Inquiry type": type,
+      "Dietary preferences": preferences,
+      Message: message,
+    };
 
     setSending(true);
     try {
@@ -26,21 +37,13 @@ export default function ContactPage() {
         type: "inquiry",
         subject: `Inquiry: ${type || "Millet Bakes"} — ${name}`,
         replyTo: email,
-        fields: {
-          Name: name,
-          Email: email,
-          Phone: phone,
-          "Delivery / event date": date,
-          "Inquiry type": type,
-          "Dietary preferences": preferences,
-          Message: message,
-        },
+        fields,
       });
-      openWhatsApp(
-        `*Contact Inquiry - Millet Bakes*\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nDate: ${date}\nType: ${type}\nPreferences: ${preferences}\nMessage: ${message}`,
-      );
-      window.alert("Thank you for reaching out to Millet Bakes! Master Baker Santhiya will connect with you shortly on WhatsApp/Email.");
-      form.reset();
+      storeLeadHandoff(INQUIRY_HANDOFF_KEY, {
+        fields,
+        message: `*Contact Inquiry - Millet Bakes*\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nDate: ${date}\nType: ${type}\nPreferences: ${preferences}\nMessage: ${message}`,
+      });
+      router.push("/inquiry-thankyou");
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "Could not send the inquiry. Please try again.");
     } finally {

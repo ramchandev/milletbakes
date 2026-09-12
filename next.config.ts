@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: "/html-sitemap",
+        destination: "/sitemap",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

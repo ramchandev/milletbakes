@@ -1,0 +1,825 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Shop &amp; Order | Millet Bakes - Artisanal Ancient Grain Delicacies</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&amp;family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary": "#ffffff",
+            "on-background": "#1c1c18",
+            "on-secondary-fixed-variant": "#79310e",
+            "tertiary-fixed-dim": "#accfb5",
+            "primary-container": "#3a1d13",
+            "secondary": "#974723",
+            "surface-container-high": "#ebe8e1",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface": "#fdf9f2",
+            "on-error-container": "#93000a",
+            "on-primary-fixed-variant": "#613e32",
+            "surface-tint": "#7c5548",
+            "outline": "#83746f",
+            "secondary-fixed-dim": "#ffb598",
+            "primary": "#200903",
+            "inverse-primary": "#edbbab",
+            "primary-fixed": "#ffdbd0",
+            "on-tertiary-fixed": "#022110",
+            "surface-bright": "#fdf9f2",
+            "inverse-on-surface": "#f4f0e9",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "surface-variant": "#e6e2db",
+            "tertiary": "#001307",
+            "on-tertiary-container": "#72937c",
+            "background": "#fdf9f2",
+            "on-surface": "#1c1c18",
+            "tertiary-container": "#0a2a19",
+            "surface-dim": "#dddad3",
+            "inverse-surface": "#31302c",
+            "surface-container-highest": "#e6e2db",
+            "on-tertiary-fixed-variant": "#2e4d39",
+            "on-secondary-fixed": "#370e00",
+            "on-primary-fixed": "#2f140b",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f7f3ec",
+            "error": "#ba1a1a",
+            "on-secondary-container": "#772f0d",
+            "on-primary-container": "#ae8273",
+            "tertiary-fixed": "#c7ebd0",
+            "on-surface-variant": "#514440",
+            "secondary-fixed": "#ffdbce",
+            "surface-container": "#f1ede6",
+            "outline-variant": "#d5c3bd",
+            "primary-fixed-dim": "#edbbab",
+            "secondary-container": "#ff996e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Epilogue", "sans-serif"],
+            "display": ["Epilogue", "sans-serif"],
+            "body": ["Plus Jakarta Sans", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Physical pantry craft aesthetic styles */
+    .stamped-border {
+      border: 1px dashed rgba(131, 116, 111, 0.45);
+    }
+    .grain-badge {
+      box-shadow: inset 0 1px 2px rgba(58, 29, 19, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen flex flex-col">
+<!-- Top Announcement Bar -->
+<div class="bg-primary text-on-primary py-2 px-4 text-xs font-label tracking-wider flex justify-center items-center gap-3">
+<span class="inline-flex items-center gap-1 font-bold text-secondary-container">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span> Small-Batch Baking
+    </span>
+<span class="hidden sm:inline text-on-primary-container">•</span>
+<span class="">Zero Refined Sugar • 100% Sprouted Ancient Grains • Chennai Fresh Doorstep Delivery</span>
+<span class="hidden md:inline text-on-primary-container">•</span>
+<span class="hidden md:inline text-secondary-fixed font-semibold">Pre-order by 4 PM for Next Day Dispatch</span>
+</div>
+<!-- Shared Component: TopNavBar -->
+<!-- Active state mapped precisely to 'Shop & Order' per protocol -->
+<header class="sticky top-0 z-50 bg-surface/95 backdrop-blur-md border-b border-outline-variant/30 shadow-sm"><nav class="max-w-7xl mx-auto px-6 md:px-12 h-24 flex items-center justify-between"><a href="#" class="flex items-center gap-3 py-2"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3lvXM8PjtNr7SyQv6hj9sjyxP8YQS2eIUyx-CVeg-AKEZ8SJSKHt3qYrLIqZVTnMKjWrmFG33IZlhNAUfG1sc8gFvv_D0arAuxIUh-Dx0QpkTD2-CQPAwKcpvTq4Rh0dwxLMpxeP9rbzvJkjzjG_X5gShU1_qifvyfnnCs-Lx9fZ0xyC4mn5AGPjhGV_wIUdj1aYimB5JvuaJIQhkz9v-TyBixG_lvwyjA5RLX8K0-yMKSjdrdzO-A8GPsFgewEI4zsA" alt="Millet Bakes Logo" class="h-16 w-auto object-contain drop-shadow-sm"><div class="flex flex-col"><span class="font-bold text-2xl tracking-tight text-primary font-headline">Millet Bakes</span><span class="text-[10px] tracking-widest uppercase font-semibold text-secondary">Ancient Grain Craft</span></div></a><div class="hidden md:flex items-center gap-8 font-medium text-sm text-on-surface-variant"><a class="hover:text-secondary transition-colors" href="#">Home</a><a class="text-secondary font-bold border-b-2 border-secondary pb-1" href="#">Shop &amp; Order</a><a class="hover:text-secondary transition-colors" href="#">Corporate Workshops</a><a class="hover:text-secondary transition-colors" href="#">Our Story</a><a class="hover:text-secondary transition-colors" href="#">Contact</a></div><div class="flex items-center gap-4"><a href="#" id="cart-drawer-toggle" class="relative p-2 text-primary hover:text-secondary transition-colors" aria-label="Shopping Bag"><span class="material-symbols-outlined text-2xl">shopping_bag</span><span class="absolute top-1 right-1 bg-secondary text-on-secondary text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center" id="nav-cart-count">3</span></a><a href="https://wa.me/916383100431" target="_blank" class="inline-flex items-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full font-medium text-sm shadow-sm hover:shadow transition-all active:scale-95"><span class="material-symbols-outlined text-lg">chat</span><span class="">WhatsApp Order</span></a></div></nav></header>
+<!-- Main Content Canvas -->
+<main class="flex-grow">
+<!-- Hero / Pantry Header -->
+<section class="relative bg-surface-container-low border-b border-outline-variant/20 pt-10 pb-12 overflow-hidden">
+<!-- Subdued hearth pattern watermark -->
+<div class="absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 w-96 h-96 rounded-full bg-secondary-container/10 blur-3xl pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-headline font-bold uppercase tracking-wider mb-3">
+<span class="material-symbols-outlined text-[14px] fill">spa</span> 100% Ancient Grain Craft
+            </div>
+<h1 class="font-headline text-3xl md:text-5xl font-extrabold text-primary tracking-tight leading-tight">
+              Wholesome Artisanal Pantry
+            </h1>
+<p class="font-body text-base md:text-lg text-on-surface-variant mt-3 leading-relaxed">
+              Freshly stoneground finger millet (Ragi), foxtail, and unrefined country jaggery. Baked daily in limited small-batches right out of our Chennai studio kitchen.
+            </p>
+</div>
+<!-- Quick stats / Pantry guarantees -->
+<div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/40 shadow-sm">
+<div class="flex items-center gap-2 border-r border-outline-variant/40 pr-4">
+<span class="material-symbols-outlined text-secondary text-2xl">eco</span>
+<div>
+<div class="font-headline font-bold text-xs text-primary">0% MAIDA</div>
+<div class="text-[11px] text-outline">Whole millets only</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-2xl">science</span>
+<div>
+<div class="font-headline font-bold text-xs text-primary">ZERO CHEMICALS</div>
+<div class="text-[11px] text-outline">Pure, natural ingredients</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter Navigation Pills -->
+<div class="flex items-center gap-2.5 overflow-x-auto pb-2 pt-8 no-scrollbar scroll-smooth" id="category-pills">
+<button class="category-btn active px-5 py-2 rounded-full font-label text-xs md:text-sm font-bold bg-primary text-on-primary transition-all whitespace-nowrap shadow-sm" data-category="all">
+            All Treats (6)
+          </button>
+<button class="category-btn px-5 py-2 rounded-full font-label text-xs md:text-sm font-semibold bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-all whitespace-nowrap" data-category="cookies">
+            Crunchy Cookies
+          </button>
+<button class="category-btn px-5 py-2 rounded-full font-label text-xs md:text-sm font-semibold bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-all whitespace-nowrap" data-category="cakes">
+            Guilt-Free Cakes
+          </button>
+<button class="category-btn px-5 py-2 rounded-full font-label text-xs md:text-sm font-semibold bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-all whitespace-nowrap" data-category="granola">
+            Granola &amp; Breakfast
+          </button>
+<button class="category-btn px-5 py-2 rounded-full font-label text-xs md:text-sm font-semibold bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-all whitespace-nowrap" data-category="hampers">
+            Gift Hampers &amp; Snack Boxes
+          </button>
+</div>
+</div>
+</section>
+<!-- Catalog & Sticky Cart Split View -->
+<div class="max-w-7xl mx-auto px-6 md:px-12 py-12">
+<!-- Layout: 8 cols catalog, 4 cols live WhatsApp order console -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Product Grid Column (8 cols) -->
+<section class="lg:col-span-8">
+<div class="flex items-center justify-between pb-6 border-b border-outline-variant/30 mb-6">
+<span class="font-headline font-bold text-base text-on-surface" id="catalog-counter">Displaying 6 handcrafted creations</span>
+<div class="flex items-center gap-2 text-xs font-label text-outline">
+<span class="">Sort by:</span>
+<select class="bg-transparent border border-outline-variant/50 rounded-md py-1 px-2.5 text-xs text-on-surface focus:border-secondary focus:ring-0 font-body">
+<option>Curated Artisan Specials</option>
+<option>Price: Low to High</option>
+<option>Highest Fiber Content</option>
+</select>
+</div>
+</div>
+<!-- The Artisan Bento Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="product-grid">
+<!-- Item 1: Ragi Chocolate Cookies -->
+<article class="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="cookies">
+<div>
+<div class="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
+<img alt="Ragi Chocolate Cookies" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv080aJCLY0MNQMuCpzCMVQi_x8WusRCBOUo8s2NPewveYDlePYXFMAHL2mw0qoBGKLKD_Z1yafXyQB2_QRWKCJ29nvXT_4FmoulSzvaKa9nSircITn1arcfVJdK9gy8AWycdoyglMVh4yWRG6Y7KIWPElnsYoiDqeKhBqfo_jbczTGAlfaR-V8utybHBqFqhKDuzaAVl2oprU6_sfZnbCf7Wg0lXVs_OFMLiIBfRNcHnxTuDRkE7RkruPGZnLqlEWZ3Y">
+<div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary text-on-primary tracking-wide">ZERO MAIDA</span>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary-fixed text-on-secondary-fixed tracking-wide">RAGI RICH</span>
+</div>
+<span class="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">Box of 8 pcs</span>
+</div>
+<div class="p-5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Ragi Chocolate Cookies</h3>
+<p class="text-xs text-outline mt-0.5 font-label">Sprouted Finger Millet • Dutch Cocoa • Country Jaggery</p>
+</div>
+<span class="font-headline text-lg font-extrabold text-secondary">₹280</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
+                    Crunchy artisan exterior with a wholesome chewy cocoa melt. Crafted with hand-milled ragi, dark cocoa, cold-pressed coconut oil, and sweetened strictly with palm jaggery.
+                  </p>
+</div>
+</div>
+<div class="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-outline">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+<span class="">100% Preservative-Free</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onclick="addToCart('Ragi Chocolate Cookies', 280, 'Box of 8 pcs')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add to Order
+                </button>
+</div>
+</article>
+<!-- Item 2: Artisanal Millet Granola -->
+<article class="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="granola">
+<div>
+<div class="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
+<img alt="Artisanal Millet Granola" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoBf7z2oVNLrzlhDwqgIBkPTlY2qqwsY0SnmT7SAh6LRpXdQd-E1llQlU8b_Iwgcd9KoySXXeEHGFPrEJ7-HDWBzgYWzO39dWQfRBEAaXHVWJcg5qjusuVG5ejod_GgljfpnlGIuRvnrF7byHSHCzhvYoZtcG0d_-Jla9XUD6zHu1mWmE8fkc5OBb1hxaP9M5yKZr_v9xdoTch5O9xfcBiSryThEIBURmaaVleSBXvPCE0xyFqGUtyqGQ9VdBQ0mur64s">
+<div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary-fixed text-on-secondary-fixed tracking-wide">SUGAR FREE</span>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-tertiary-fixed text-on-tertiary-fixed tracking-wide">HIGH FIBER</span>
+</div>
+<span class="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">400g Jar</span>
+</div>
+<div class="p-5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Artisanal Millet Granola</h3>
+<p class="text-xs text-outline mt-0.5 font-label">Toasted Foxtail • Jumbo Oats • Pumpkin Seeds • Almonds</p>
+</div>
+<span class="font-headline text-lg font-extrabold text-secondary">₹350</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
+                    Slow oven-roasted clusters of ancient millet flakes, pumpkin &amp; sunflower seeds, roasted almonds, and natural sun-dried raisins. Crisp, energetic breakfast staple.
+                  </p>
+</div>
+</div>
+<div class="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-outline">
+<span class="material-symbols-outlined text-[16px] text-tertiary">bolt</span>
+<span class="">Sustained Energy</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onclick="addToCart('Artisanal Millet Granola', 350, '400g Jar')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add to Order
+                </button>
+</div>
+</article>
+<!-- Item 3: Evening Wellness Snacks Box -->
+<article class="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="hampers">
+<div>
+<div class="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
+<img alt="Evening Wellness Snacks Box" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwpbsF3XL5pq3_R6mKkXJzYrW65a61NLGR8FDFnjXyaLbeQ0ZX_98aiqgqKN_rb01XzFuSX7tWkXb4CgtNQ-C2e0_9bLcEMIKwDK2qS2HjcI2TYGP1nCnR0EfLFB3yr8-uouK2xh1E-OirOI_VBvHfDoLhILCKgz0bBo3QWTdZbtzfWDu6v7Vt9XJEmsAKlTp3WHR7afIX_dAYIlo3Sxl3GShpLMZSe4QBxtL3vQs1B19bmJaxaTg77-LEbC5ioOmNBXI">
+<div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary-container text-on-primary-container tracking-wide">BESTSELLER</span>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-surface-container-highest text-on-surface-variant tracking-wide">CUSTOMIZABLE</span>
+</div>
+<span class="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">Curated Box</span>
+</div>
+<div class="p-5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Evening Wellness Snacks Box</h3>
+<p class="text-xs text-outline mt-0.5 font-label">Savory Millet Ribbon Crisps • Seed Clusters • Mini Ragi Bites</p>
+</div>
+<span class="font-headline text-lg font-extrabold text-secondary">₹650</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
+                    Wholesome bites for evening chai cravings. Includes 3 portioned pouches of savory roasted spiced millets, dark cacao almond clusters, and crunchy jaggery biscuits.
+                  </p>
+</div>
+</div>
+<div class="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-outline">
+<span class="material-symbols-outlined text-[16px] text-tertiary">card_giftcard</span>
+<span class="">Gift Sleeve Included</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onclick="addToCart('Evening Wellness Snacks Box', 650, 'Curated Box')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add to Order
+                </button>
+</div>
+</article>
+<!-- Item 4: Decadent Millet Chocolate Fudge Cake -->
+<article class="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="cakes">
+<div>
+<div class="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
+<img alt="Decadent Millet Chocolate Fudge Cake" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOOfY1ozNgt_NRtqRnQ_XfHmu5tpMWcc_b-zWAEDHbNdjxBvW88J73kPlRTMDg2LHCyBBSYeW0NNyzbOguIusyJ14VvhohEF7SpYwFUXYwQnMk80MSzs-SC84pKkifkDzJaeTVCoHyS90o85oJ3U4lbwZRp93oX7wD7zgpqqD97QNu_o5wdZWaVtebksI5bf07Bh2_WQ9TOoPLaOScX-ah4zdiaeqrmMewWu1wuKbar8n3rzdI_FZUK74O6f3xXj1Te6E">
+<div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary text-on-primary tracking-wide">SIGNATURE CAKE</span>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary text-on-secondary tracking-wide">ORGANIC JAGGERY</span>
+</div>
+<span class="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">500g Cake</span>
+</div>
+<div class="p-5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Decadent Millet Fudge Cake</h3>
+<p class="text-xs text-outline mt-0.5 font-label">Sprouted Ragi &amp; Little Millet • Cocoa Ganache • Edible Beads</p>
+</div>
+<span class="font-headline text-lg font-extrabold text-secondary">₹850</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
+                    Zero white flour, zero refined sugar. A moist, melt-in-the-mouth cocoa sponge layered with rich dark chocolate ganache whipped with pure coconut milk and palm jaggery.
+                  </p>
+</div>
+</div>
+<div class="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-outline">
+<span class="material-symbols-outlined text-[16px] text-secondary">celebration</span>
+<span class="">Chennai Same-Day Ready</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onclick="addToCart('Decadent Millet Fudge Cake', 850, '500g Cake')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add to Order
+                </button>
+</div>
+</article>
+<!-- Item 5: Roasted Almond Millet Tea Cake -->
+<article class="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="cakes">
+<div>
+<div class="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
+<img alt="Roasted Almond Millet Tea Cake" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdWhPze32q3kKSyd9om-NbKVTpab11-c_67uhbytQBmIDHQ9p3K76m1UoxJiF_H9WOg6BkFqrydzzJatsvHa-J413VoLElkUUyI7yC7mT0ELpPX5EYqQEcQEXZ9MUKkqzh6JOV8xOT3-1h1-sd41lI7Qw143t4zKSTrxzhhm196VdXs3UHKaXJqRIwAfjxFyZ8Vzskvb_nGjuxXS51xrWvI_uQuzFj3VxfW0WXzTdpDYY-iVW6Ir4tzXC8o_54gSAhe8A">
+<div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-surface-container-high text-on-surface-variant tracking-wide">TEA TIME SPECIAL</span>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-tertiary-fixed text-on-tertiary-fixed tracking-wide">DAIRY-FREE OPTION</span>
+</div>
+<span class="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">450g Loaf</span>
+</div>
+<div class="p-5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Roasted Almond Tea Cake</h3>
+<p class="text-xs text-outline mt-0.5 font-label">Foxtail Flour • Crushed California Almonds • Green Cardamom</p>
+</div>
+<span class="font-headline text-lg font-extrabold text-secondary">₹420</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
+                    A fragrant, naturally golden tea loaf with aromatic crushed cardamom pods, toasted almond slivers, and raw wild honey glaze. Soft, crumbly, and naturally satiating.
+                  </p>
+</div>
+</div>
+<div class="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-outline">
+<span class="material-symbols-outlined text-[16px] text-tertiary">local_cafe</span>
+<span class="">Perfect with Black Tea</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onclick="addToCart('Roasted Almond Tea Cake', 420, '450g Loaf')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add to Order
+                </button>
+</div>
+</article>
+<!-- Item 6: Festive & Corporate Wellness Hamper -->
+<article class="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="hampers">
+<div>
+<div class="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An elegant, artisanal corporate wellness gift hamper from Millet Bakes containing rustic jars of ancient grain granola, sealed Kraft boxes of ragi cookies, and roasted nut clusters on warm parchment paper. Warm amber sunlight illuminates the textured packaging, burlap ribbons, and hand-stamped wax seals. The colors feature rich cocoa brown, natural kraft tones, and earthy terracotta." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2MzLShL-Gxjfyi8ZWc_SkSUYHOWKnTwVeLStoZVGfSthFnnasd7cTf9HV-TuBNL_sTFujcuK2G0XJD-2_ZAuzNnbRZbd2sJ-GYdkf4Zeu1SFE1EOcuLRpz3bJ79Zrf9xjWK_OpfUNZD1nx-_bSoXPNrc16lKDEMf7MrX7W59lvofBjrAXkQkNWwp-bLw4UzoHU_xxjgnVeWPZLFhVdqE_phABDcw39nEviqCMzXjsfp4aSGms_CEByw">
+<div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary text-on-secondary tracking-wide">GIFT HAMPER</span>
+<span class="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary-fixed text-on-primary-fixed tracking-wide">LUXURY PACKAGING</span>
+</div>
+<span class="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">Artisan Gift Box</span>
+</div>
+<div class="p-5">
+<div class="flex items-start justify-between gap-2">
+<div>
+<h3 class="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Corporate Wellness Hamper</h3>
+<p class="text-xs text-outline mt-0.5 font-label">Granola Jar + Ragi Cookies + Herb Crackers + Seed Bar</p>
+</div>
+<span class="font-headline text-lg font-extrabold text-secondary">₹1,250</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
+                    A thoughtfully assembled gift experience for employees, clients, or festive family gatherings. Comes in a gold-embossed reusable tin with personalized artisan message cards.
+                  </p>
+</div>
+</div>
+<div class="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-outline">
+<span class="material-symbols-outlined text-[16px] text-tertiary">groups</span>
+<span class="">Bulk Customization</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onclick="addToCart('Corporate Wellness Hamper', 1250, 'Artisan Gift Box')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add to Order
+                </button>
+</div>
+</article>
+</div>
+</section>
+<!-- Live Sticky WhatsApp Order Console (4 cols) -->
+<aside class="lg:col-span-4 sticky top-28 space-y-6">
+<div class="bg-surface-container-lowest rounded-2xl border-2 border-primary/15 p-6 shadow-md relative overflow-hidden">
+<!-- Header Stamp -->
+<div class="flex items-center justify-between border-b border-outline-variant/30 pb-4 mb-5">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-base">shopping_bag</span>
+</div>
+<div>
+<h2 class="font-headline font-bold text-base text-primary">Your Oven Basket</h2>
+<p class="text-[11px] text-outline font-label">Direct Baker Dispatch • Chennai</p>
+</div>
+</div>
+<span class="text-xs font-headline font-bold bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded-full" id="basket-badge-count">3 items</span>
+</div>
+<!-- Item Summary List -->
+<div class="space-y-3.5 max-h-60 overflow-y-auto pr-1" id="cart-items-container">
+<!-- Cart items dynamically rendered via JS, initial seed items below -->
+<div class="cart-row flex items-center justify-between gap-3 text-xs pb-3 border-b border-outline-variant/20" data-id="1">
+<div class="flex-1 min-w-0">
+<div class="font-headline font-semibold text-on-surface truncate">Ragi Chocolate Cookies</div>
+<div class="text-[11px] text-outline">₹280 • Box of 8 pcs</div>
+</div>
+<div class="flex items-center border border-outline-variant/60 rounded-full bg-surface-container">
+<button class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold" onclick="updateQty(1, -1)">-</button>
+<span class="qty-display w-6 text-center font-bold text-xs">1</span>
+<button class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold" onclick="updateQty(1, 1)">+</button>
+</div>
+<span class="font-bold text-primary w-12 text-right">₹280</span>
+</div>
+<div class="cart-row flex items-center justify-between gap-3 text-xs pb-3 border-b border-outline-variant/20" data-id="2">
+<div class="flex-1 min-w-0">
+<div class="font-headline font-semibold text-on-surface truncate">Artisanal Millet Granola</div>
+<div class="text-[11px] text-outline">₹350 • 400g Jar</div>
+</div>
+<div class="flex items-center border border-outline-variant/60 rounded-full bg-surface-container">
+<button class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold" onclick="updateQty(2, -1)">-</button>
+<span class="qty-display w-6 text-center font-bold text-xs">1</span>
+<button class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold" onclick="updateQty(2, 1)">+</button>
+</div>
+<span class="font-bold text-primary w-12 text-right">₹350</span>
+</div>
+<div class="cart-row flex items-center justify-between gap-3 text-xs pb-3 border-b border-outline-variant/20" data-id="3">
+<div class="flex-1 min-w-0">
+<div class="font-headline font-semibold text-on-surface truncate">Decadent Millet Fudge Cake</div>
+<div class="text-[11px] text-outline">₹850 • 500g Cake</div>
+</div>
+<div class="flex items-center border border-outline-variant/60 rounded-full bg-surface-container">
+<button class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold" onclick="updateQty(3, -1)">-</button>
+<span class="qty-display w-6 text-center font-bold text-xs">1</span>
+<button class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold" onclick="updateQty(3, 1)">+</button>
+</div>
+<span class="font-bold text-primary w-12 text-right">₹850</span>
+</div>
+</div>
+<!-- Custom Options: Packaging Selection -->
+<div class="mt-5 pt-4 border-t border-outline-variant/30 space-y-3">
+<label class="block text-xs font-headline font-bold text-primary">Packaging Choice</label>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<label class="flex items-center gap-2 p-2 rounded-lg border border-secondary/40 bg-secondary-fixed/10 cursor-pointer">
+<input checked="" class="text-secondary focus:ring-secondary" name="packaging" onchange="updatePackaging(0)" type="radio" value="Eco Kraft Box">
+<div>
+<div class="font-semibold text-primary text-[11px]">Eco Kraft Box</div>
+<div class="text-[10px] text-outline">Included (Free)</div>
+</div>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg border border-outline-variant/50 hover:border-secondary/40 cursor-pointer">
+<input class="text-secondary focus:ring-secondary" name="packaging" onchange="updatePackaging(90)" type="radio" value="Heritage Tin">
+<div>
+<div class="font-semibold text-primary text-[11px]">Heritage Tin</div>
+<div class="text-[10px] text-secondary font-bold">+₹90</div>
+</div>
+</label>
+</div>
+<!-- Delivery Destination Selector -->
+<div class="pt-2">
+<label class="block text-xs font-headline font-bold text-primary mb-1.5">Delivery Destination</label>
+<select class="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0" id="delivery-select">
+<option value="Chennai Express (Same Day / ₹80)">Chennai Local Express (Same-Day / Next-Day)</option>
+<option value="Pan-India Standard Courier (₹120)">Pan-India Secure Air Courier (2-3 Days)</option>
+<option value="Self-Pickup from Chennai Bakehouse (Free)">Self-Pickup from Kodambakkam Studio (Free)</option>
+</select>
+</div>
+<!-- Custom Note Input -->
+<div class="pt-1">
+<label class="block text-xs font-headline font-bold text-primary mb-1">Custom Note / Dietary Instruction</label>
+<textarea class="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0 resize-none placeholder:text-outline/70" id="order-notes" placeholder="e.g. Please write 'Happy Birthday Appa!' on cake card. Extra crunchy cookies if possible." rows="2"></textarea>
+</div>
+</div>
+<!-- Price Breakdown Calculation -->
+<div class="mt-4 pt-4 border-t border-outline-variant/30 space-y-1.5 text-xs">
+<div class="flex justify-between text-on-surface-variant">
+<span class="">Items Subtotal</span>
+<span class="font-semibold" id="cart-subtotal">₹1,480</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span class="">Selected Packaging</span>
+<span class="font-semibold" id="cart-packaging-fee">₹0</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span class="">Freshness Packing &amp; Tax</span>
+<span class="text-tertiary font-semibold">FREE</span>
+</div>
+<div class="flex justify-between text-base font-headline font-extrabold text-primary pt-2 border-t border-outline-variant/20">
+<span class="">Estimated Total</span>
+<span class="text-secondary font-extrabold" id="cart-grand-total">₹1,480</span>
+</div>
+</div>
+<!-- WhatsApp Primary CTA Action Button -->
+<button class="w-full mt-5 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-4 rounded-full font-label font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md active:scale-98 group" onclick="dispatchWhatsAppOrder()">
+<span class="material-symbols-outlined text-[20px] text-tertiary-fixed group-hover:scale-110 transition-transform">chat</span>
+<span class="">Complete Order via WhatsApp</span>
+</button>
+<p class="text-[10px] text-center text-outline mt-2 font-body">Instant baker confirmation • Direct UPI payment via WhatsApp</p>
+<!-- Baker Support Direct Contact -->
+<div class="mt-4 p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-center gap-2 text-[11px] text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary text-base">support_agent</span>
+<span class="">Questions? Call or message Santhiya at <a class="font-bold underline text-primary" href="tel:+916383100431">+91 63831 00431</a></span>
+</div>
+</div>
+<!-- Artisan Quality Seal Block -->
+<div class="bg-surface-container-low rounded-xl p-5 border border-outline-variant/30 flex items-center gap-4">
+<div class="w-16 h-16 shrink-0 rounded-full border-2 border-dashed border-secondary flex flex-col items-center justify-center text-center p-1 bg-surface">
+<span class="material-symbols-outlined text-secondary text-base">bakery_dining</span>
+<span class="font-headline text-[7px] font-extrabold uppercase leading-none tracking-tighter text-primary">CHENNAI BAKE</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-xs text-primary">Made to Order Everyday</h3>
+<p class="text-[11px] text-on-surface-variant mt-1 leading-snug">We never hold shelf stock. Your cakes and cookies enter the oven only after order verification.</p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Wholesome Value & Transparency Pillars -->
+<section class="bg-surface-container-low border-y border-outline-variant/30 py-16">
+<div class="max-w-7xl mx-auto px-6 md:px-12">
+<div class="text-center max-w-2xl mx-auto mb-12">
+<span class="text-xs font-headline font-bold tracking-widest text-secondary uppercase">Pure Ancient Grain Philosophy</span>
+<h2 class="font-headline text-2xl md:text-3xl font-extrabold text-primary mt-1">Why Families Trust Millet Bakes</h2>
+<p class="font-body text-sm text-on-surface-variant mt-2">Every recipe is meticulously balanced with native millets to support slow glucose absorption and clean vitality.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/30 flex items-center justify-center text-secondary mb-4">
+<span class="material-symbols-outlined text-2xl">grain</span>
+</div>
+<h3 class="font-headline font-bold text-sm text-primary">No Maida, Ever</h3>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">We refuse white flour and refined starches. Our base is 100% stoneground finger millet, pearl millet, and foxtail.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-4">
+<span class="material-symbols-outlined text-2xl">nature</span>
+</div>
+<h3 class="font-headline font-bold text-sm text-primary">Organic Country Jaggery</h3>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">Sweetened with mineral-dense palm jaggery, date molasses, and wild raw honey. Absolutely zero white refined crystals.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-secondary-container/30 flex items-center justify-center text-on-secondary-container mb-4">
+<span class="material-symbols-outlined text-2xl">sanitizer</span>
+</div>
+<h3 class="font-headline font-bold text-sm text-primary">Zero Palm Oil &amp; Trans-Fats</h3>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">Baked exclusively with pure butter, cold-pressed cold coconut oil, and cold-pressed sesame oil. Heart-friendly baking.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/30">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined text-2xl">verified</span>
+</div>
+<h3 class="font-headline font-bold text-sm text-primary">FSSAI Certified Kitchen</h3>
+<p class="text-xs text-on-surface-variant mt-2 leading-relaxed">Complies with state food safety hygiene norms. Handcrafted under rigorous small-batch sanitization protocols.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Custom Corporate Hamper CTA Banner -->
+<section class="max-w-7xl mx-auto px-6 md:px-12 py-16">
+<div class="bg-primary-container text-on-primary rounded-2xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8"><div class="max-w-xl z-10"><span class="px-3.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-headline font-bold uppercase tracking-wider shadow-sm">Corporate &amp; Festive Gifting</span><h2 class="font-headline text-2xl md:text-4xl font-extrabold text-white mt-4 leading-tight tracking-tight">Elevate Your Corporate Wellness with Ancient Grain Hampers</h2><p class="font-body text-sm md:text-base text-secondary-fixed mt-3 leading-relaxed">Custom brand branding sleeves, personalized founder notes, and curated sweet-savory gift tins. Delivered seamlessly across Chennai and India for Diwali, New Year, and team achievements.</p><div class="mt-6 flex flex-wrap gap-4"><a class="bg-secondary hover:bg-secondary-container text-white px-6 py-3 rounded-full font-label text-xs md:text-sm font-bold transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center gap-2" href="https://wa.me/916383100431?text=Hi%20Santhiya,%20we%20want%20to%20inquire%20about%20bulk%20corporate%20gifting%20hampers." target="_blank"><span class="material-symbols-outlined text-base">chat</span> Request Corporate Catalog</a><a class="border-2 border-secondary-fixed text-secondary-fixed hover:bg-secondary-fixed hover:text-on-secondary-fixed px-6 py-3 rounded-full font-label text-xs md:text-sm font-bold transition-all flex items-center gap-2" href="tel:+916383100431"><span class="material-symbols-outlined text-base">call</span> Schedule Tasting Call</a></div></div><div class="relative z-10 w-full md:w-80 bg-surface-container-lowest text-on-surface p-6 rounded-2xl shadow-xl border border-outline-variant/40"><div class="flex items-center gap-3 border-b border-outline-variant/30 pb-3.5"><span class="material-symbols-outlined text-secondary text-3xl">workspaces</span><div><div class="font-headline font-bold text-sm text-primary">Team Wellness Kits</div><div class="text-[11px] font-semibold text-secondary mt-0.5">MOQ: 15 Hampers</div></div></div><ul class="text-xs space-y-2.5 mt-4 text-on-surface font-body"><li class="flex items-center gap-2 font-medium"><span class="material-symbols-outlined text-secondary text-base">check_circle</span><span class="">Co-branded logo banderoles</span></li><li class="flex items-center gap-2 font-medium"><span class="material-symbols-outlined text-secondary text-base">check_circle</span><span class="">Dietary customisation (Keto/Vegan)</span></li><li class="flex items-center gap-2 font-medium"><span class="material-symbols-outlined text-secondary text-base">check_circle</span><span class="">Direct individual doorstep dispatch</span></li></ul></div></div>
+</section>
+</main>
+<!-- Shared Component: Footer -->
+<footer class="bg-primary-container text-on-primary-container border-t border-outline/20">
+<div class="w-full px-6 md:px-12 py-16 max-w-7xl mx-auto flex flex-col gap-12">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+<!-- Col 1: Brand Essence & Logo -->
+<div class="md:col-span-4 space-y-4">
+<div class="flex items-center gap-3">
+<img alt="Millet Bakes Logo" class="w-auto object-contain brightness-110 h-16" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMiwamg2n9ADo3zyIZw3g1D89am09IMSmyrDZKjIt-0NDcR29pb6AYPXD9SEwMiFy5ctEAqc8JscGGo8kpV3CEmZNCFdejZ_H5HVX4Xb1k3x4R6SyrywjlmEcPgS0fzVM-gaiMU7dGyHs6wXpoDcqFuE0HIVRDWKmOoh203qdDYWEHxsjjd00ZS5sM_ckvXnMQDw7tCWyOJVTanRbnMN-J5ux5iTZY00Ht9AQlYg0N17O90PZQMijU4s0PENuNZdx8NWE">
+<div>
+<span class="font-headline text-2xl font-extrabold text-on-primary tracking-tight">Millet Bakes</span>
+<p class="text-xs text-on-primary-container/80 font-label tracking-wide uppercase">The Ancient Grain For A Modern Diet</p>
+</div>
+</div>
+<p class="font-body text-xs leading-relaxed text-on-primary-container/90">
+            Pioneering handcrafted, nutrient-rich bakery confections using indigenous Tamil Nadu millets, heirloom cold-pressed oils, and non-centrifugal cane jaggery.
+          </p>
+<div class="pt-2 text-xs text-on-primary-container/80">
+<span class="">Founder &amp; Head Baker: </span>
+<span class="text-on-primary font-semibold">Santhiya Karthikeyan</span>
+</div>
+</div>
+<!-- Col 2: Navigation Links -->
+<div class="md:col-span-2 space-y-3">
+<h4 class="font-headline text-xs font-bold uppercase tracking-widest text-secondary-fixed">Our Standards</h4>
+<ul class="space-y-2 text-xs font-label text-on-primary-container/80">
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Zero Refined Sugar</a></li>
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">100% Ancient Grains</a></li>
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Stoneground In-House</a></li>
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">No Synthetic Preservatives</a></li>
+</ul>
+</div>
+<!-- Col 3: Programs & Enterprise -->
+<div class="md:col-span-3 space-y-3">
+<h4 class="font-headline text-xs font-bold uppercase tracking-widest text-secondary-fixed">Experiences</h4>
+<ul class="space-y-2 text-xs font-label text-on-primary-container/80">
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Corporate Gifting</a></li>
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Workshops</a></li>
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Healthy Baking Masterclasses</a></li>
+<li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Wedding Favor Tins</a></li>
+</ul>
+</div>
+<!-- Col 4: Reach Out & Connect -->
+<div class="md:col-span-3 space-y-3">
+<h4 class="font-headline text-xs font-bold uppercase tracking-widest text-secondary-fixed">Direct Oven Contact</h4>
+<p class="text-xs text-on-primary-container/90">
+            Have a custom flavor request or bulk order inquiry? Reach us instantly:
+          </p>
+<div class="space-y-1.5 pt-1 text-xs">
+<a class="flex items-center gap-2 text-on-primary font-semibold hover:text-secondary-fixed transition-colors" href="tel:+916383100431">
+<span class="material-symbols-outlined text-sm">call</span> Contact: +91 63831 00431
+            </a>
+<a class="flex items-center gap-2 text-on-primary hover:text-secondary-fixed transition-colors" href="https://instagram.com/millet_bakes" target="_blank"><svg class="w-4 h-4 shrink-0 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg><span class="">Instagram @millet_bakes</span></a>
+<div class="flex items-center gap-2 text-on-primary-container/70">
+<span class="material-symbols-outlined text-sm">location_on</span> Chennai, Tamil Nadu, India
+            </div>
+</div>
+</div>
+</div>
+<!-- Copyright & Bottom Legals -->
+<div class="pt-8 border-t border-outline/20 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-on-primary-container/70 font-label">
+<p class="">© 2025 Millet Bakes. Pure Millet &amp; Jaggery Craft. All rights reserved. | Website Design By Bizysite</p>
+<div class="flex gap-6">
+<a class="hover:underline" href="#">Food Safety Standards (FSSAI)</a>
+<a class="hover:underline" href="#">Dispatch &amp; Shelf-Life Policy</a>
+<a class="hover:underline" href="#">Privacy Terms</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Client-side Interactions -->
+<script>
+    // State management for order drawer
+    const cartState = [
+      { id: 1, name: 'Ragi Chocolate Cookies', price: 280, spec: 'Box of 8 pcs', qty: 1 },
+      { id: 2, name: 'Artisanal Millet Granola', price: 350, spec: '400g Jar', qty: 1 },
+      { id: 3, name: 'Decadent Millet Fudge Cake', price: 850, spec: '500g Cake', qty: 1 }
+    ];
+    let packagingCost = 0;
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      container.innerHTML = '';
+      let subtotal = 0;
+      let totalQty = 0;
+
+      cartState.forEach(item => {
+        if (item.qty > 0) {
+          subtotal += item.price * item.qty;
+          totalQty += item.qty;
+
+          const row = document.createElement('div');
+          row.className = 'cart-row flex items-center justify-between gap-3 text-xs pb-3 border-b border-outline-variant/20';
+          row.innerHTML = `
+            <div class="flex-1 min-w-0">
+              <div class="font-headline font-semibold text-on-surface truncate">${item.name}</div>
+              <div class="text-[11px] text-outline">₹${item.price} • ${item.spec}</div>
+            </div>
+            <div class="flex items-center border border-outline-variant/60 rounded-full bg-surface-container">
+              <button onclick="updateQty(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold">-</button>
+              <span class="qty-display w-6 text-center font-bold text-xs">${item.qty}</span>
+              <button onclick="updateQty(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold">+</button>
+            </div>
+            <span class="font-bold text-primary w-12 text-right">₹${item.price * item.qty}</span>
+          `;
+          container.appendChild(row);
+        }
+      });
+
+      if (totalQty === 0) {
+        container.innerHTML = '<p class="text-xs text-outline py-4 text-center">Your oven basket is currently empty. Add fresh bakes from the left!</p>';
+      }
+
+      document.getElementById('nav-cart-count').textContent = totalQty;
+      document.getElementById('basket-badge-count').textContent = `${totalQty} item${totalQty === 1 ? '' : 's'}`;
+      document.getElementById('cart-subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('cart-packaging-fee').textContent = `₹${packagingCost}`;
+      document.getElementById('cart-grand-total').textContent = `₹${(subtotal + packagingCost).toLocaleString('en-IN')}`;
+    }
+
+    function updateQty(id, delta) {
+      const item = cartState.find(i => i.id === id);
+      if (item) {
+        item.qty += delta;
+        if (item.qty < 0) item.qty = 0;
+        renderCart();
+      }
+    }
+
+    function addToCart(name, price, spec) {
+      const existing = cartState.find(i => i.name === name);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cartState.push({
+          id: Date.now(),
+          name: name,
+          price: price,
+          spec: spec,
+          qty: 1
+        });
+      }
+      renderCart();
+      
+      // Feedback pulse
+      const badge = document.getElementById('basket-badge-count');
+      badge.classList.add('scale-125', 'bg-secondary', 'text-white');
+      setTimeout(() => {
+        badge.classList.remove('scale-125', 'bg-secondary', 'text-white');
+      }, 300);
+    }
+
+    function updatePackaging(cost) {
+      packagingCost = cost;
+      renderCart();
+    }
+
+    function dispatchWhatsAppOrder() {
+      const activeItems = cartState.filter(i => i.qty > 0);
+      if (activeItems.length === 0) {
+        alert('Your basket is empty. Please select baked treats to proceed!');
+        return;
+      }
+
+      const packagingChoice = document.querySelector('input[name="packaging"]:checked').value;
+      const delivery = document.getElementById('delivery-select').value;
+      const note = document.getElementById('order-notes').value.trim();
+
+      let message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n`;
+      message += `*Items Ordered:*\n`;
+      let subtotal = 0;
+      activeItems.forEach((item, index) => {
+        message += `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ₹${item.price * item.qty}\n`;
+        subtotal += item.price * item.qty;
+      });
+
+      message += `\n*Packaging:* ${packagingChoice} (+₹${packagingCost})`;
+      message += `\n*Delivery Mode:* ${delivery}`;
+      if (note) {
+        message += `\n*Notes/Custom Message:* ${note}`;
+      }
+      message += `\n*Estimated Total:* ₹${subtotal + packagingCost}\n\n`;
+      message += `Kindly confirm dispatch slot & share payment QR code. Thank you!`;
+
+      const encodedUrl = `https://wa.me/916383100431?text=${encodeURIComponent(message)}`;
+      window.open(encodedUrl, '_blank');
+    }
+
+    // Category Filter Buttons
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-btn').forEach(b => {
+          b.classList.remove('active', 'bg-primary', 'text-on-primary');
+          b.classList.add('bg-surface-container', 'text-on-surface-variant');
+        });
+        btn.classList.add('active', 'bg-primary', 'text-on-primary');
+        btn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+
+        const cat = btn.getAttribute('data-category');
+        const cards = document.querySelectorAll('.product-card');
+        let count = 0;
+
+        cards.forEach(card => {
+          if (cat === 'all' || card.getAttribute('data-item-cat') === cat) {
+            card.style.display = 'flex';
+            count++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        document.getElementById('catalog-counter').textContent = `Displaying ${count} handcrafted creation${count === 1 ? '' : 's'}`;
+      });
+    });
+
+    // Toggle search row
+    document.getElementById('search-toggle').addEventListener('click', () => {
+      const searchRow = document.getElementById('search-bar-row');
+      searchRow.classList.toggle('hidden');
+      if (!searchRow.classList.contains('hidden')) {
+        document.getElementById('catalog-search').focus();
+      }
+    });
+
+    // Instant filter through text
+    document.getElementById('catalog-search').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const cards = document.querySelectorAll('.product-card');
+      let count = 0;
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(term)) {
+          card.style.display = 'flex';
+          count++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      document.getElementById('catalog-counter').textContent = `Displaying ${count} handcrafted creation${count === 1 ? '' : 's'}`;
+    });
+
+    // Mobile scroll to cart drawer helper
+    document.getElementById('cart-drawer-toggle').addEventListener('click', () => {
+      document.querySelector('aside').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+
+
+</body></html>

@@ -1,77 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { HAMPER_KEYS } from "@/lib/catalog";
+import { useState } from "react";
+import Link from "next/link";
+import {
+  HOME_FILTERS,
+  PRODUCTS,
+  formatProductTitle,
+  productMatchesHomeFilter,
+} from "@/lib/catalog";
 import { useCart } from "@/lib/cart-context";
-import { emailLead } from "@/lib/submit-lead-client";
-import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
+import { formatINR } from "@/lib/site";
 
 export default function HomePage() {
   const cart = useCart();
-  const [qty, setQty] = useState({ ragi: 0, granola: 0, wellness: 0 });
-  const [note, setNote] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [destination, setDestination] = useState("Chennai Local (Same-Day / Next-Day)");
-  const [packaging, setPackaging] = useState("kraft");
-  const [filter, setFilter] = useState("All Delights");
-  const [sending, setSending] = useState(false);
+  const [filter, setFilter] = useState<(typeof HOME_FILTERS)[number]>("All Delights");
 
-  const hamperTotal = useMemo(
-    () => qty.ragi * 280 + qty.granola * 350 + qty.wellness * 650 + (packaging === "tin" ? 90 : 0),
-    [packaging, qty],
-  );
-
-  function updateQty(item: "ragi" | "granola" | "wellness", delta: number) {
-    const next = Math.max(0, qty[item] + delta);
-    setQty({ ...qty, [item]: next });
-    cart.setQty(HAMPER_KEYS[item], next);
-  }
-
-  function addToCart(itemName: string, price: number) {
-    if (itemName.includes("Ragi")) updateQty("ragi", 1);
-    else if (itemName.includes("Granola")) updateQty("granola", 1);
-    else if (itemName.includes("Wellness")) updateQty("wellness", 1);
-    else cart.addItem(itemName, price);
+  function addToCart(name: string, price: number, spec?: string) {
+    cart.addItem(name, price, spec);
     cart.openDrawer();
-  }
-
-  async function dispatchWhatsAppOrder() {
-    const totalUnits = qty.ragi + qty.granola + qty.wellness;
-    if (totalUnits === 0) {
-      window.alert("Please add at least one delicious bake to your order!");
-      return;
-    }
-    if (!isValidPhone(cart.phone)) {
-      window.alert("Please enter a valid WhatsApp / phone number.");
-      return;
-    }
-    const name = customerName || "Valued Customer";
-    const packagingLabel = packaging === "tin" ? "Festive Tin" : "Artisanal Kraft Bakery Box";
-    const message = `*Hello Millet Bakes!* I would like to place a handcrafted fresh order:\n\n• Ragi Chocolate Cookies: ${qty.ragi} box(es)\n• Millet Granola Jar: ${qty.granola} jar(s)\n• Wellness Snack Hamper: ${qty.wellness} box(es)\n\n*Customer Name:* ${name}\n*Phone / WhatsApp:* ${cart.phone}\n*Delivery Route:* ${destination}\n*Gift Note:* ${note || "None"}\n*Packaging:* ${packagingLabel}\n*Estimated Value:* ${formatINR(hamperTotal)}\n\nPlease share payment details and fresh dispatch schedule. Thank you!`;
-
-    setSending(true);
-    try {
-      await emailLead({
-        type: "order",
-        subject: `Website order — ${name}`,
-        fields: {
-          Customer: name,
-          Phone: cart.phone,
-          "Ragi chocolate cookies": `${qty.ragi} box(es)`,
-          "Millet granola jar": `${qty.granola} jar(s)`,
-          "Wellness snack hamper": `${qty.wellness} box(es)`,
-          Packaging: packagingLabel,
-          "Delivery route": destination,
-          "Gift note": note || "None",
-          "Estimated value": formatINR(hamperTotal),
-        },
-      });
-      openWhatsApp(message);
-    } catch (error) {
-      window.alert(error instanceof Error ? error.message : "Could not send the order email. Please try again.");
-    } finally {
-      setSending(false);
-    }
   }
 
   return (
@@ -178,185 +124,56 @@ export default function HomePage() {
 </div>
 {/* Category Filter Pills */}
 <div className="flex flex-wrap gap-2">
-{["All Delights", "Cookies", "Granola Jars", "Tea Cakes", "Hampers"].map((label) => (
+{HOME_FILTERS.map((label) => (
 <button key={label} type="button" onClick={() => setFilter(label)} className={filter === label ? "px-4 py-2 rounded-full bg-primary text-background font-label-md text-label-md" : "px-4 py-2 rounded-full bg-surface-container-high text-primary hover:bg-surface-variant font-label-md text-label-md transition"}>{label}</button>
 ))}
 </div>
 </div>
 {/* Product Grid */}
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-{/* Card 1: Ragi Chocolate Cookies */}
-<div className={`${filter === "All Delights" || filter === "Cookies" ? "" : "hidden "}bg-surface-container-lowest rounded-2xl parchment-border warm-card-shadow warm-card-shadow-hover transition duration-200 flex flex-col overflow-hidden`}>
+{PRODUCTS.map((product) => (
+<div key={product.id} id={product.id} className={`${productMatchesHomeFilter(product, filter) ? "" : "hidden "}bg-surface-container-lowest rounded-2xl parchment-border warm-card-shadow warm-card-shadow-hover transition duration-200 flex flex-col overflow-hidden`}>
 <div className="relative bg-surface-container-low p-4 h-72 flex items-center justify-center overflow-hidden">
-<img alt="Ragi Chocolate Cookies by Millet Bakes" className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZy35oki0vh4InC_iheQz7PVSyTEVv9WOJHbrb4_vGAZj8_Kg61Q1XxZqS4jA0vPHG9VXi7nzCvM0Nwb0WKMqzaxh6l2sRLvGGApPitqzV1SHYylYvUkZPstYU5Z8xdY9BX_zJe4-V-3SH2RDZvMBlsU_Ed4i7XYajJ7fyVrfO97LAf3JQhqLarsV78IZxN2cM-_PrrhaHfDH-ZfB9iIE8hRJZFt0kx7TD5SC2euqn5ZSqlpIYZ0qurz1Yh7mXdquVRK8" />
-<span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label-stamp text-label-stamp uppercase tracking-wider">
-            Bestseller
-          </span>
-<span className="absolute top-6 right-6 px-3 py-1 rounded-full bg-surface-container-lowest text-on-tertiary-fixed-variant font-label-stamp text-label-stamp uppercase border border-outline-variant/30">
-            No Maida
-          </span>
+<img alt={formatProductTitle(product)} className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105" src={product.image} />
+{(product.tags ?? []).slice(0, 2).map((tag, index) => (
+<span key={tag} className={index === 0 ? "absolute top-6 left-6 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label-stamp text-label-stamp uppercase tracking-wider" : "absolute top-6 right-6 px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-stamp text-label-stamp uppercase border border-outline-variant/30"}>{tag}</span>
+))}
 </div>
 <div className="p-6 flex flex-col flex-grow justify-between">
 <div>
-<div className="flex items-center justify-between mb-2">
-<span className="font-label-md text-label-md text-secondary uppercase tracking-wider">Sprouted Ragi Special</span>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant">Box of 8 Cookies</span>
+<div className="flex items-center justify-between mb-2 gap-2">
+<span className="font-label-md text-label-md text-secondary uppercase tracking-wider">{product.category}</span>
+<span className="font-label-stamp text-label-stamp text-on-surface-variant shrink-0">{product.spec}</span>
 </div>
-<h3 className="font-headline-sm text-headline-sm text-primary">Ragi Chocolate Cookies</h3>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-              Crunchy outside, wholesome inside. Made with pure sprouted ragi flour and rich dark cocoa, sweetened with organic jaggery.
-            </p>
+<h3 className="font-headline-sm text-headline-sm text-primary">{product.name}</h3>
+{product.tamilName ? <p className="font-body-sm text-body-sm text-secondary mt-1">{product.tamilName}</p> : null}
+<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">{product.description}</p>
+{product.highlights?.length ? (
+<ul className="mt-3 space-y-1 text-xs text-on-surface-variant">
+{product.highlights.map((item) => (
+<li key={item} className="flex items-start gap-2">
+<span className="material-symbols-outlined highlight-check text-secondary">check_circle</span>
+<span className="leading-5">{item}</span>
+</li>
+))}
+</ul>
+) : null}
 </div>
 <div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
 <span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
-<span className="font-title-lg text-xl text-primary font-bold">₹280</span>
+<span className="font-title-lg text-xl text-primary font-bold">{formatINR(product.price)}</span>
 </div>
-<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Ragi Chocolate Cookies', 280)}>
+<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart(product.name, product.price, product.spec)}>
 <span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
-<span className="">Add to Order</span>
+<span>Add to Order</span>
 </button>
 </div>
 </div>
 </div>
-{/* Card 2: Artisanal Millet Granola Jar */}
-<div className={`${filter === "All Delights" || filter === "Granola Jars" ? "" : "hidden "}bg-surface-container-lowest rounded-2xl parchment-border warm-card-shadow warm-card-shadow-hover transition duration-200 flex flex-col overflow-hidden`}>
-<div className="relative bg-surface-container-low p-4 h-72 flex items-center justify-center overflow-hidden">
-<img alt="Artisanal Millet Granola Jar with nuts and seeds" className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC40nkwDPTJ3lQIE_2CAvQBOLebXO_hODorYAOLP2NqSEhiqRgzOFjFELsVb5W-Nm7TsRXruBRrVj5mSt5SzOcWi30zVglZyI3hAMqWfpFSzW3mzrqqUzwM3PeAL-tuROZDxsWaEflKF8CO-cuQkdeJ97xACXSaxNK7QPnG5GyFWbvDerjEh9dPXMh4xO-hMvnBI_xs45ftFCZBMVQm1N1bK46To1t_iTV6-ijxkpm3Tp2y-B2vsl_qgAdC40ZQl8OksvM" />
-<span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-tertiary-container text-tertiary-fixed font-label-stamp text-label-stamp uppercase tracking-wider">
-            High Protein
-          </span>
-<span className="absolute top-6 right-6 px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-stamp text-label-stamp uppercase border border-outline-variant/30">
-            Sugar Free
-          </span>
-</div>
-<div className="p-6 flex flex-col flex-grow justify-between">
-<div>
-<div className="flex items-center justify-between mb-2">
-<span className="font-label-md text-label-md text-secondary uppercase tracking-wider">Breakfast &amp; Snacking</span>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant">400g Jar</span>
-</div>
-<h3 className="font-headline-sm text-headline-sm text-primary">Artisanal Millet Granola Jar</h3>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-              Everyday energy packed with roasted almonds, melon seeds, sprouted foxtail millets, and gentle jaggery crunch.
-            </p>
-</div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-<div>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
-<span className="font-title-lg text-xl text-primary font-bold">₹350</span>
-</div>
-<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Artisanal Millet Granola Jar', 350)}>
-<span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
-<span className="">Add to Order</span>
-</button>
-</div>
-</div>
-</div>
-{/* Card 3: Evening Wellness Snacks Box */}
-<div className={`${filter === "All Delights" || filter === "Hampers" ? "" : "hidden "}bg-surface-container-lowest rounded-2xl parchment-border warm-card-shadow warm-card-shadow-hover transition duration-200 flex flex-col overflow-hidden`}>
-<div className="relative bg-surface-container-low p-4 h-72 flex items-center justify-center overflow-hidden">
-<img alt="Evening Wellness Snacks Box Hamper by Millet Bakes" className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF0YbmLmI2CiZPN4W1Ys027DN-KD5-Yf3Q0i0i1pt7CIIHEJ96v_Y4QNSWUyRw1zqJVM96oxouh3I6obtdP5CrEbDYtYgByMamDMX9__-68HPfSa4sYvmy1Bg47-E6cI0v0sgah10O-Dyiwc95hw4Kd3cgcvbxgcN3ET6R-DzHOAPl5FurCbLnLCq_NRflcFiqKTCKq133D0sKQo33OzWw6MYSfyY75dgXLwUdaOa7Vnn6W_hCGth5vyvlcbOnV1axjQw" />
-<span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-stamp text-label-stamp uppercase tracking-wider">
-            Gift Edition
-          </span>
-<span className="absolute top-6 right-6 px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-stamp text-label-stamp uppercase border border-outline-variant/30">
-            Customizable
-          </span>
-</div>
-<div className="p-6 flex flex-col flex-grow justify-between">
-<div>
-<div className="flex items-center justify-between mb-2">
-<span className="font-label-md text-label-md text-secondary uppercase tracking-wider">Corporate &amp; Festive</span>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant">Curated Box</span>
-</div>
-<h3 className="font-headline-sm text-headline-sm text-primary">Evening Wellness Snacks Box</h3>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-              Wholesome bites for evening cravings. Includes millet crackers, mini cookie packs, and roasted spiced nut clusters.
-            </p>
-</div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-<div>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
-<span className="font-title-lg text-xl text-primary font-bold">₹650</span>
-</div>
-<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Evening Wellness Snacks Box', 650)}>
-<span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
-<span className="">Add to Order</span>
-</button>
-</div>
-</div>
-</div>
-{/* Card 4: Decadent Millet Chocolate Fudge Cake */}
-<div className={`${filter === "All Delights" || filter === "Tea Cakes" ? "" : "hidden "}bg-surface-container-lowest rounded-2xl parchment-border warm-card-shadow warm-card-shadow-hover transition duration-200 flex flex-col overflow-hidden`}>
-<div className="relative bg-surface-container-low p-4 h-72 flex items-center justify-center overflow-hidden">
-<img alt="Decadent Millet Chocolate Fudge Cake by Millet Bakes" className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0Y9SN5HX4h0nxplXvrT6sGUYe6jvNsUSkWAIEU233HXYwDZRi4jK_5veH3q25Anlgjye8LMesveVr5VZ_DFucW669ezeEPmns91wWiRc_jcLke75HD3OYvcO2s-DXpiM62hKLRVTF79xjkmH8-cfiPUXkQFG45GFOgyvgW4DyDFwJ5uxja1L8UCvGPsvm3q2X5JZRG7n_p58U3F7mbbvImH72THQybSmRm_ATSZOQruyGuTGTQZu7A-slz167hfpkjWg" />
-<span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-primary text-background font-label-stamp text-label-stamp uppercase tracking-wider">
-            Signature Cake
-          </span>
-<span className="absolute top-6 right-6 px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-stamp text-label-stamp uppercase border border-outline-variant/30">
-            500g
-          </span>
-</div>
-<div className="p-6 flex flex-col flex-grow justify-between">
-<div>
-<div className="flex items-center justify-between mb-2">
-<span className="font-label-md text-label-md text-secondary uppercase tracking-wider">Celebration Special</span>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant">Eggless / Zero Maida</span>
-</div>
-<h3 className="font-headline-sm text-headline-sm text-primary">Decadent Millet Chocolate Fudge Cake</h3>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-              Moist, rich, artisanal chocolate indulgence made with sprouted ragi flour and slow-simmered palm jaggery ganache.
-            </p>
-</div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-<div>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
-<span className="font-title-lg text-xl text-primary font-bold">₹850</span>
-</div>
-<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Decadent Millet Chocolate Fudge Cake', 850)}>
-<span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
-<span className="">Add to Order</span>
-</button>
-</div>
-</div>
-</div>
-{/* Card 5: Roasted Almond Millet Tea Cake */}
-<div className={`${filter === "All Delights" || filter === "Tea Cakes" ? "" : "hidden "}bg-surface-container-lowest rounded-2xl parchment-border warm-card-shadow warm-card-shadow-hover transition duration-200 flex flex-col overflow-hidden`}>
-<div className="relative bg-surface-container-low p-4 h-72 flex items-center justify-center overflow-hidden">
-<img alt="Roasted Almond Millet Tea Cake Loaf" className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX47r6e-cFeh5UwSP_J0atDOYpsKfTv9JU4o8BbQEAf84YXQ6nG0fojJRz1s7lVeGO8n5nktcqIWTztF-1Y67GZH6H2-hTFUxDO-6TaqpNtb6FipMf4XFROlVRH0VHiYQ8d9PjMIr5KfPAXOSgS1_2m5hn1ggRJGuUAMnfd6wtMo7aIm8n6ZM5ZeD02JItgN6tBn70LaYsIa3_gYOOsGzyWZfrtOcc_-M7Aj-mEklntvsP7qOktKmvervSC5IXrM00xd0" />
-<span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-surface-container-high text-primary font-label-stamp text-label-stamp uppercase tracking-wider">
-            Tea Time Essential
-          </span>
-<span className="absolute top-6 right-6 px-3 py-1 rounded-full bg-surface-container-lowest text-primary font-label-stamp text-label-stamp uppercase border border-outline-variant/30">
-            Loaf
-          </span>
-</div>
-<div className="p-6 flex flex-col flex-grow justify-between">
-<div>
-<div className="flex items-center justify-between mb-2">
-<span className="font-label-md text-label-md text-secondary uppercase tracking-wider">Ancient Grain Sponge</span>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant">Daily Fresh</span>
-</div>
-<h3 className="font-headline-sm text-headline-sm text-primary">Roasted Almond Millet Tea Cake</h3>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-              Rustic sponge baked with golden foxtail millet, crowned with crisp toasted almonds, lightly infused with cardamom.
-            </p>
-</div>
-<div className="pt-6 mt-6 border-t border-outline-variant/30 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-<div>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant block uppercase">Price</span>
-<span className="font-title-lg text-xl text-primary font-bold">₹420</span>
-</div>
-<button type="button" className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-primary-container text-background hover:bg-primary font-label-md text-label-md flex items-center gap-2 transition active:scale-95" onClick={() => addToCart('Roasted Almond Millet Tea Cake', 420)}>
-<span className="material-symbols-outlined text-sm" data-icon="add_shopping_cart">add_shopping_cart</span>
-<span className="">Add to Order</span>
-</button>
-</div>
-</div>
-</div>
-{/* Card 6: Corporate Gifting & Custom Bundle */}
-<div className={`${filter === "All Delights" || filter === "Hampers" ? "" : "hidden "}bg-primary-container text-background rounded-2xl parchment-border p-8 flex flex-col justify-between warm-card-shadow`}><div className="">
+))}
+{/* Custom Hamper CTA */}
+<div className={`${filter === "All Delights" ? "" : "hidden "}bg-primary-container text-background rounded-2xl parchment-border p-8 flex flex-col justify-between warm-card-shadow`}><div className="">
 <div className="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-6 shadow-sm">
 <span className="material-symbols-outlined" data-icon="featured_seasonal_and_gifts">featured_seasonal_and_gifts</span>
 </div>
@@ -372,204 +189,10 @@ export default function HomePage() {
 </ul>
 </div>
 <div className="pt-8">
-<a className="w-full block text-center px-6 py-3.5 rounded-full bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-container transition font-label-md text-label-md font-bold shadow-md hover:scale-105 active:scale-95" href="#hamper-builder">
-            Launch Hamper Customizer
-          </a>
+<Link className="w-full block text-center px-6 py-3.5 rounded-full bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-container transition font-label-md text-label-md font-bold shadow-md hover:scale-105 active:scale-95" href="/corporate">
+            Enquire for Corporate Gifting
+          </Link>
 </div></div>
-</div>
-</section>
-{/* INTERACTIVE ORDER CAPTURE & CUSTOM HAMPER BUILDER */}
-<section className="py-20 bg-surface-container-low border-y border-outline-variant/30" id="hamper-builder">
-<div className="max-w-7xl mx-auto px-6 md:px-12">
-<div className="text-center max-w-3xl mx-auto mb-14">
-<span className="font-label-stamp text-label-stamp uppercase tracking-widest text-secondary">TAILOR YOUR HARVEST BOX</span>
-<h2 className="font-display-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight mt-1">Interactive Order Builder</h2>
-<p className="font-body-lg text-body-lg text-on-surface-variant mt-3">
-          Mix &amp; match fresh bakes, pick custom gift messaging, select delivery dates in Chennai or pan-India shipping, and dispatch your order straight to our baking team on WhatsApp.
-        </p>
-</div>
-<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-{/* Left: Form Selections (8 Cols) */}
-<div className="lg:col-span-8 bg-surface-container-lowest p-6 md:p-10 rounded-3xl parchment-border warm-card-shadow space-y-8">
-{/* Step 1: Select Baked Delights */}
-<div>
-<div className="flex items-center justify-between border-b border-outline-variant/30 pb-4 mb-6">
-<div className="flex items-center gap-3">
-<span className="w-8 h-8 rounded-full bg-primary text-background font-bold flex items-center justify-center font-label-md text-label-md">1</span>
-<h3 className="font-title-lg text-title-lg text-primary">Choose Your Fresh Bakes</h3>
-</div>
-<span className="font-label-md text-label-md text-secondary font-semibold">Live Pricing</span>
-</div>
-<div className="space-y-4">
-{/* Item Row 1 */}
-<div className="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-outline-variant/30">
-<div className="flex items-center gap-4">
-<div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-<img alt="Ragi cookies item" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2M5RZolQaIc3MEP3GDnbP5OH5G5eUIA1cuJf4ccvA8LOK1qD-yBhEJQ6I35aUOw16Tj3LzCps6f-NZhkkFw4pkdFMHQjHsGPg8fvX2GtdOI8DnJQKW22dPPiR2u4-bjNn3WJqZ4Slapt0WjIab9Bb3mlx5SK4yUhuYU6lu_wU1w3PORqx-Je_TW3S0oRxPzyM8ZO--bVthAeng5SXSLyFCqLeBlbL3casVTpereB3XxMCE3xjmyRHvFOiNlotVFPvk9E" />
-</div>
-<div>
-<h4 className="font-title-lg text-sm text-primary">Ragi Chocolate Cookies</h4>
-<span className="font-body-sm text-body-sm text-on-surface-variant">₹280 / box (8 pcs)</span>
-</div>
-</div>
-<div className="flex items-center gap-3">
-<button className="w-8 h-8 rounded-full bg-surface-container-high hover:bg-surface-variant flex items-center justify-center font-bold text-primary" onClick={() => updateQty('ragi', -1)} type="button">-</button>
-<span className="w-6 text-center font-bold font-title-lg text-sm">{qty.ragi}</span>
-<button className="w-8 h-8 rounded-full bg-primary text-background hover:bg-primary-container flex items-center justify-center font-bold" onClick={() => updateQty('ragi', 1)} type="button">+</button>
-</div>
-</div>
-{/* Item Row 2 */}
-<div className="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-outline-variant/30">
-<div className="flex items-center gap-4">
-<div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-<img alt="Granola jar item" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC9Id6V2fjKnzmWZst-h4neEvNLsDmV_wLMzDutImQ7ehkug8dUgpFmFRUPLBnoYghVC85N4OJV-90hX0GkY6HY3ksYUghPh209CUmTntjL5cn7RAhGJuouJxVs921FFn2vxdfD5PUqQtfk7O0l_H67bVES-Ug1gM0b0Els4lOirNlU6IXYctTr4vb8aNyRwn9YTRXZOe_KaIQAYc8PYRNNJBqCDSjvdIqBYpAmxgqS9IWx4y7y9oFKljPyrgq8T8iek4" />
-</div>
-<div>
-<h4 className="font-title-lg text-sm text-primary">Millet Granola Jar</h4>
-<span className="font-body-sm text-body-sm text-on-surface-variant">₹350 / 400g jar</span>
-</div>
-</div>
-<div className="flex items-center gap-3">
-<button className="w-8 h-8 rounded-full bg-surface-container-high hover:bg-surface-variant flex items-center justify-center font-bold text-primary" onClick={() => updateQty('granola', -1)} type="button">-</button>
-<span className="w-6 text-center font-bold font-title-lg text-sm">{qty.granola}</span>
-<button className="w-8 h-8 rounded-full bg-primary text-background hover:bg-primary-container flex items-center justify-center font-bold" onClick={() => updateQty('granola', 1)} type="button">+</button>
-</div>
-</div>
-{/* Item Row 3 */}
-<div className="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-outline-variant/30">
-<div className="flex items-center gap-4">
-<div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-<img alt="Wellness snack box item" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwp0hRL9Pp1KBe4V3pOj7r42_qKpgN8hkooYrcCmzfOPHx7W67FCle3xF8RBJqz8QiCdR6Tizx_SYe6j0hYKJS14TsVuKNScB0TlUZMkcyuLBlaKB8cxIRVQoV7ZUzTmjEOlBP55OkavdPZXtHHUzAz-nc7RzEAlJmReP09j6w2JbNz-5meKpr4iYzqKFczyqP6KGULX1Q7O9yAxC3c4Bw872TegYLNSHtrNlsNajDCElv_Q3CqfqMhFNZz7l4xlg0P5M" />
-</div>
-<div>
-<h4 className="font-title-lg text-sm text-primary">Evening Wellness Snacks Box</h4>
-<span className="font-body-sm text-body-sm text-on-surface-variant">₹650 / gift hamper</span>
-</div>
-</div>
-<div className="flex items-center gap-3">
-<button className="w-8 h-8 rounded-full bg-surface-container-high hover:bg-surface-variant flex items-center justify-center font-bold text-primary" onClick={() => updateQty('wellness', -1)} type="button">-</button>
-<span className="w-6 text-center font-bold font-title-lg text-sm">{qty.wellness}</span>
-<button className="w-8 h-8 rounded-full bg-primary text-background hover:bg-primary-container flex items-center justify-center font-bold" onClick={() => updateQty('wellness', 1)} type="button">+</button>
-</div>
-</div>
-</div>
-</div>
-{/* Step 2: Packaging & Customizations */}
-<div>
-<div className="flex items-center gap-3 border-b border-outline-variant/30 pb-4 mb-6">
-<span className="w-8 h-8 rounded-full bg-primary text-background font-bold flex items-center justify-center font-label-md text-label-md">2</span>
-<h3 className="font-title-lg text-title-lg text-primary">Packaging Style &amp; Personal Note</h3>
-</div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-<label className={`cursor-pointer p-4 rounded-2xl flex flex-col justify-between ${packaging === "kraft" ? "border-2 border-secondary bg-surface-container-low" : "border border-outline-variant/40 hover:border-secondary"}`}>
-<div className="flex items-center justify-between">
-<span className="font-title-lg text-sm text-primary">Artisanal Kraft Bakery Box</span>
-<input checked={packaging === "kraft"} className="text-primary focus:ring-secondary" name="packaging" type="radio" value="kraft" onChange={() => setPackaging("kraft")} />
-</div>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">Unbleached eco-pulp paper with hand-stamped seed paper sleeve. (Complimentary)</p>
-</label>
-<label className={`cursor-pointer p-4 rounded-2xl flex flex-col justify-between ${packaging === "tin" ? "border-2 border-secondary bg-surface-container-low" : "border border-outline-variant/40 hover:border-secondary"}`}>
-<div className="flex items-center justify-between">
-<span className="font-title-lg text-sm text-primary">Festive Tin + Ribbon (+₹90)</span>
-<input checked={packaging === "tin"} className="text-primary focus:ring-secondary" name="packaging" type="radio" value="tin" onChange={() => setPackaging("tin")} />
-</div>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-2">Vintage embossed metal keepsake tin with handwritten jute tag.</p>
-</label>
-</div>
-<div className="mt-4">
-<label className="block font-label-md text-label-md text-primary mb-1">Handwritten Gift Note (Optional):</label>
-<textarea className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm placeholder:text-outline" placeholder="e.g. Happy Birthday Deepa! Enjoy these pure ragi treats from Chennai." rows={2} value={note} onChange={(event) => setNote(event.target.value)} />
-</div>
-</div>
-{/* Step 3: Delivery Location & Timeline */}
-<div>
-<div className="flex items-center gap-3 border-b border-outline-variant/30 pb-4 mb-6">
-<span className="w-8 h-8 rounded-full bg-primary text-background font-bold flex items-center justify-center font-label-md text-label-md">3</span>
-<h3 className="font-title-lg text-title-lg text-primary">Delivery Details</h3>
-</div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div>
-<label className="block font-label-md text-label-md text-primary mb-1">Recipient Name</label>
-<input className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm" placeholder="Your Name or Recipient" type="text" value={customerName} onChange={(event) => setCustomerName(event.target.value)} />
-</div>
-<div>
-<label className="block font-label-md text-label-md text-primary mb-1">Phone / WhatsApp <span className="text-error">*</span></label>
-<input className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm" inputMode="tel" placeholder="+91 98765 43210" required type="tel" value={cart.phone} onChange={(event) => cart.setPhone(event.target.value)} />
-</div>
-<div className="md:col-span-2">
-<label className="block font-label-md text-label-md text-primary mb-1">Delivery Destination</label>
-<select className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm" value={destination} onChange={(event) => setDestination(event.target.value)}>
-<option value="Chennai Local (Same-Day / Next-Day)">Chennai Local (Same-Day / Next-Day Delivery)</option>
-<option value="Tamil Nadu Outstation (2-3 Days)">Rest of Tamil Nadu Express (2-3 Days)</option>
-<option value="Pan-India Metro (Air Cargo 3-4 Days)">Pan-India Metro Cargo (Air Dispatch)</option>
-</select>
-</div>
-</div>
-</div>
-</div>
-{/* Right: Live Summary & Direct WhatsApp Checkout (4 Cols) */}
-<div className="lg:col-span-4 bg-surface-container-lowest rounded-3xl parchment-border warm-card-shadow p-6 md:p-8 sticky top-28 space-y-6">
-<div className="flex items-center gap-3 border-b border-outline-variant/30 pb-4">
-<div className="w-10 h-10 rounded-full bg-surface-container text-secondary flex items-center justify-center">
-<span className="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
-</div>
-<div>
-<h3 className="font-title-lg text-title-lg text-primary">Order Summary</h3>
-<span className="font-label-stamp text-label-stamp text-secondary">Millet Bakes Kitchen</span>
-</div>
-</div>
-{/* Live Items Calculation List */}
-<div className="space-y-3 font-body-sm text-body-sm border-b border-outline-variant/30 pb-4">
-<div className="flex justify-between items-center text-on-surface-variant">
-<span className="">Ragi Cookies (<span className="">{qty.ragi}</span>x)</span>
-<span className="font-semibold text-primary">{formatINR(qty.ragi * 280)}</span>
-</div>
-<div className="flex justify-between items-center text-on-surface-variant">
-<span className="">Granola Jar (<span className="">{qty.granola}</span>x)</span>
-<span className="font-semibold text-primary">{formatINR(qty.granola * 350)}</span>
-</div>
-<div className="flex justify-between items-center text-on-surface-variant">
-<span className="">Wellness Box (<span className="">{qty.wellness}</span>x)</span>
-<span className="font-semibold text-primary">{formatINR(qty.wellness * 650)}</span>
-</div>
-<div className="flex justify-between items-center text-on-surface-variant">
-<span className="">Packaging &amp; Stamped Seal</span>
-<span className="font-semibold text-green-700">Free</span>
-</div>
-</div>
-{/* Total Calculation */}
-<div className="space-y-1">
-<div className="flex justify-between items-baseline">
-<span className="font-title-lg text-lg text-primary font-bold">Estimated Total</span>
-<span className="font-headline-md text-headline-md text-primary font-extrabold">{formatINR(hamperTotal)}</span>
-</div>
-<span className="font-label-stamp text-label-stamp text-on-surface-variant block">*Taxes and local delivery factored at confirmation</span>
-</div>
-{/* Order Capture Action */}
-<div className="space-y-3 pt-2">
-<button className="w-full py-4 rounded-full bg-secondary text-on-secondary hover:bg-on-secondary-container transition font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md active:scale-98 disabled:opacity-60 disabled:cursor-not-allowed" disabled={sending || !isValidPhone(cart.phone) || qty.ragi + qty.granola + qty.wellness === 0} onClick={() => dispatchWhatsAppOrder()}>
-<span className="material-symbols-outlined text-xl" data-icon="send">send</span>
-<span className="">{sending ? "Sending…" : "Place Order via WhatsApp"}</span>
-</button>
-{!isValidPhone(cart.phone) ? (
-<p className="text-center font-label-stamp text-label-stamp text-secondary">Enter a valid phone number to place the order.</p>
-) : null}
-<p className="text-center font-label-stamp text-label-stamp text-on-surface-variant uppercase tracking-wider">
-              Direct DM: +91 63831 00431 / @millet_bakes
-            </p>
-</div>
-{/* Trust Badges */}
-<div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/30 space-y-2">
-<div className="flex items-center gap-2 text-xs font-semibold text-primary">
-<span className="material-symbols-outlined text-secondary text-sm" data-icon="verified_user">verified_user</span>
-<span className="">100% Guaranteed Freshness</span>
-</div>
-<p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-              Baked freshly upon order confirmation. Packaged in vacuum-sealed food-grade tins and unbleached Kraft boxes.
-            </p>
-</div>
-</div>
-</div>
 </div>
 </section>
 {/* STORY & CRAFT HERITAGE (EDITORIAL SHOWCASE) */}

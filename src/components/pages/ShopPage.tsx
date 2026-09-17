@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { PRODUCTS, formatProductTitle } from "@/lib/catalog";
 import { useCart } from "@/lib/cart-context";
 import { emailLead } from "@/lib/submit-lead-client";
 import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
@@ -12,10 +13,10 @@ export default function ShopPage() {
   const [notes, setNotes] = useState("");
   const [sending, setSending] = useState(false);
   const activeItems = cart.items.filter((item) => item.qty > 0);
-  const visibleCount = useMemo(() => {
-    const counts = { cookies: 1, granola: 1, cakes: 2, hampers: 2, all: 6 } as const;
-    return counts[category as keyof typeof counts] ?? 6;
-  }, [category]);
+  const visibleProducts = PRODUCTS.filter(
+    (product) => category === "all" || product.category === category,
+  );
+  const visibleCount = visibleProducts.length;
 
   function addToCart(name: string, price: number, spec: string) {
     cart.addItem(name, price, spec);
@@ -34,8 +35,8 @@ export default function ShopPage() {
     const lines = activeItems
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
-    const total = formatINR(cart.subtotal + cart.packaging.cost);
-    const message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${cart.phone}\n*Packaging:* ${cart.packaging.label} (+${formatINR(cart.packaging.cost)})\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${total}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
+    const total = formatINR(cart.subtotal);
+    const message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${cart.phone}\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${total}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
 
     setSending(true);
     try {
@@ -45,7 +46,6 @@ export default function ShopPage() {
         fields: {
           Items: lines,
           Phone: cart.phone,
-          Packaging: `${cart.packaging.label} (+${formatINR(cart.packaging.cost)})`,
           Delivery: delivery,
           Notes: notes || "None",
           "Estimated total": total,
@@ -115,11 +115,10 @@ export default function ShopPage() {
 {/* Filter Navigation Pills */}
 <div className="flex items-center gap-2.5 overflow-x-auto pb-2 pt-8 no-scrollbar scroll-smooth" id="category-pills">
 {[
-  { id: "all", label: "All Treats (6)" },
+  { id: "all", label: `All Treats (${PRODUCTS.length})` },
   { id: "cookies", label: "Crunchy Cookies" },
   { id: "cakes", label: "Guilt-Free Cakes" },
   { id: "granola", label: "Granola & Breakfast" },
-  { id: "hampers", label: "Gift Hampers & Snack Boxes" },
 ].map((pill) => (
 <button key={pill.id} type="button" onClick={() => setCategory(pill.id)} className={category === pill.id ? "category-btn active px-5 py-2 rounded-full font-label text-xs md:text-sm font-bold bg-primary text-on-primary transition-all whitespace-nowrap shadow-sm" : "category-btn px-5 py-2 rounded-full font-label text-xs md:text-sm font-semibold bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-all whitespace-nowrap"}>{pill.label}</button>
 ))}
@@ -145,210 +144,51 @@ export default function ShopPage() {
 </div>
 {/* The Artisan Bento Grid */}
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6" id="product-grid">
-{/* Item 1: Ragi Chocolate Cookies */}
-<article id="ragi-cookies" className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="cookies" hidden={category !== "all" && category !== "cookies"}>
+{visibleProducts.map((product) => (
+<article key={product.id} id={product.id} className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
 <div>
 <div className="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
-<img alt="Ragi Chocolate Cookies" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv080aJCLY0MNQMuCpzCMVQi_x8WusRCBOUo8s2NPewveYDlePYXFMAHL2mw0qoBGKLKD_Z1yafXyQB2_QRWKCJ29nvXT_4FmoulSzvaKa9nSircITn1arcfVJdK9gy8AWycdoyglMVh4yWRG6Y7KIWPElnsYoiDqeKhBqfo_jbczTGAlfaR-V8utybHBqFqhKDuzaAVl2oprU6_sfZnbCf7Wg0lXVs_OFMLiIBfRNcHnxTuDRkE7RkruPGZnLqlEWZ3Y" />
+<img alt={formatProductTitle(product)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src={product.image} />
 <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary text-on-primary tracking-wide">ZERO MAIDA</span>
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary-fixed text-on-secondary-fixed tracking-wide">RAGI RICH</span>
+{(product.tags ?? []).slice(0, 2).map((tag, index) => (
+<span key={tag} className={index === 0 ? "px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary text-on-primary tracking-wide" : "px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary-fixed text-on-secondary-fixed tracking-wide"}>{tag}</span>
+))}
 </div>
-<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">Box of 8 pcs</span>
+<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">{product.spec}</span>
 </div>
 <div className="p-5">
 <div className="flex items-start justify-between gap-2">
 <div>
-<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Ragi Chocolate Cookies</h3>
-<p className="text-xs text-outline mt-0.5 font-label">Sprouted Finger Millet • Dutch Cocoa • Country Jaggery</p>
+<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">{product.name}</h3>
+{product.tamilName ? <p className="text-xs text-secondary mt-0.5 font-label">{product.tamilName}</p> : null}
+<p className="text-xs text-outline mt-0.5 font-label">{product.subtitle}</p>
 </div>
-<span className="font-headline text-lg font-extrabold text-secondary">₹280</span>
+<span className="font-headline text-lg font-extrabold text-secondary shrink-0">{formatINR(product.price)}</span>
 </div>
-<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
-                    Crunchy artisan exterior with a wholesome chewy cocoa melt. Crafted with hand-milled ragi, dark cocoa, cold-pressed coconut oil, and sweetened strictly with palm jaggery.
-                  </p>
+<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">{product.description}</p>
+{product.highlights?.length ? (
+<ul className="mt-3 space-y-1 text-[11px] text-on-surface-variant">
+{product.highlights.map((item) => (
+<li key={item} className="flex items-start gap-2">
+<span className="material-symbols-outlined highlight-check text-secondary">check_circle</span>
+<span className="leading-5">{item}</span>
+</li>
+))}
+</ul>
+) : null}
 </div>
 </div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
-<div className="flex items-center gap-1.5 text-xs text-outline">
+<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between gap-2">
+<div className="flex items-center gap-1.5 text-xs text-outline min-w-0">
 <span className="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
-<span className="">100% Preservative-Free</span>
+<span className="truncate">{product.highlights?.[0] || "Freshly baked with care"}</span>
 </div>
-<button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart('Ragi Chocolate Cookies', 280, 'Box of 8 pcs')}>
+<button type="button" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95 shrink-0" onClick={() => addToCart(product.name, product.price, product.spec)}>
 <span className="material-symbols-outlined text-[16px]">add</span> Add to Order
-                </button>
+</button>
 </div>
 </article>
-{/* Item 2: Artisanal Millet Granola */}
-<article id="granola" className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="granola" hidden={category !== "all" && category !== "granola"}>
-<div>
-<div className="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
-<img alt="Artisanal Millet Granola" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoBf7z2oVNLrzlhDwqgIBkPTlY2qqwsY0SnmT7SAh6LRpXdQd-E1llQlU8b_Iwgcd9KoySXXeEHGFPrEJ7-HDWBzgYWzO39dWQfRBEAaXHVWJcg5qjusuVG5ejod_GgljfpnlGIuRvnrF7byHSHCzhvYoZtcG0d_-Jla9XUD6zHu1mWmE8fkc5OBb1hxaP9M5yKZr_v9xdoTch5O9xfcBiSryThEIBURmaaVleSBXvPCE0xyFqGUtyqGQ9VdBQ0mur64s" />
-<div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary-fixed text-on-secondary-fixed tracking-wide">SUGAR FREE</span>
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-tertiary-fixed text-on-tertiary-fixed tracking-wide">HIGH FIBER</span>
-</div>
-<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">400g Jar</span>
-</div>
-<div className="p-5">
-<div className="flex items-start justify-between gap-2">
-<div>
-<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Artisanal Millet Granola</h3>
-<p className="text-xs text-outline mt-0.5 font-label">Toasted Foxtail • Jumbo Oats • Pumpkin Seeds • Almonds</p>
-</div>
-<span className="font-headline text-lg font-extrabold text-secondary">₹350</span>
-</div>
-<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
-                    Slow oven-roasted clusters of ancient millet flakes, pumpkin &amp; sunflower seeds, roasted almonds, and natural sun-dried raisins. Crisp, energetic breakfast staple.
-                  </p>
-</div>
-</div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
-<div className="flex items-center gap-1.5 text-xs text-outline">
-<span className="material-symbols-outlined text-[16px] text-tertiary">bolt</span>
-<span className="">Sustained Energy</span>
-</div>
-<button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart('Artisanal Millet Granola', 350, '400g Jar')}>
-<span className="material-symbols-outlined text-[16px]">add</span> Add to Order
-                </button>
-</div>
-</article>
-{/* Item 3: Evening Wellness Snacks Box */}
-<article id="wellness" className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="hampers" hidden={category !== "all" && category !== "hampers"}>
-<div>
-<div className="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
-<img alt="Evening Wellness Snacks Box" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwpbsF3XL5pq3_R6mKkXJzYrW65a61NLGR8FDFnjXyaLbeQ0ZX_98aiqgqKN_rb01XzFuSX7tWkXb4CgtNQ-C2e0_9bLcEMIKwDK2qS2HjcI2TYGP1nCnR0EfLFB3yr8-uouK2xh1E-OirOI_VBvHfDoLhILCKgz0bBo3QWTdZbtzfWDu6v7Vt9XJEmsAKlTp3WHR7afIX_dAYIlo3Sxl3GShpLMZSe4QBxtL3vQs1B19bmJaxaTg77-LEbC5ioOmNBXI" />
-<div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary-container text-on-primary-container tracking-wide">BESTSELLER</span>
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-surface-container-highest text-on-surface-variant tracking-wide">CUSTOMIZABLE</span>
-</div>
-<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">Curated Box</span>
-</div>
-<div className="p-5">
-<div className="flex items-start justify-between gap-2">
-<div>
-<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Evening Wellness Snacks Box</h3>
-<p className="text-xs text-outline mt-0.5 font-label">Savory Millet Ribbon Crisps • Seed Clusters • Mini Ragi Bites</p>
-</div>
-<span className="font-headline text-lg font-extrabold text-secondary">₹650</span>
-</div>
-<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
-                    Wholesome bites for evening chai cravings. Includes 3 portioned pouches of savory roasted spiced millets, dark cacao almond clusters, and crunchy jaggery biscuits.
-                  </p>
-</div>
-</div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
-<div className="flex items-center gap-1.5 text-xs text-outline">
-<span className="material-symbols-outlined text-[16px] text-tertiary">card_giftcard</span>
-<span className="">Gift Sleeve Included</span>
-</div>
-<button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart('Evening Wellness Snacks Box', 650, 'Curated Box')}>
-<span className="material-symbols-outlined text-[16px]">add</span> Add to Order
-                </button>
-</div>
-</article>
-{/* Item 4: Decadent Millet Chocolate Fudge Cake */}
-<article id="fudge-cake" className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="cakes" hidden={category !== "all" && category !== "cakes"}>
-<div>
-<div className="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
-<img alt="Decadent Millet Chocolate Fudge Cake" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOOfY1ozNgt_NRtqRnQ_XfHmu5tpMWcc_b-zWAEDHbNdjxBvW88J73kPlRTMDg2LHCyBBSYeW0NNyzbOguIusyJ14VvhohEF7SpYwFUXYwQnMk80MSzs-SC84pKkifkDzJaeTVCoHyS90o85oJ3U4lbwZRp93oX7wD7zgpqqD97QNu_o5wdZWaVtebksI5bf07Bh2_WQ9TOoPLaOScX-ah4zdiaeqrmMewWu1wuKbar8n3rzdI_FZUK74O6f3xXj1Te6E" />
-<div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary text-on-primary tracking-wide">SIGNATURE CAKE</span>
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary text-on-secondary tracking-wide">ORGANIC JAGGERY</span>
-</div>
-<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">500g Cake</span>
-</div>
-<div className="p-5">
-<div className="flex items-start justify-between gap-2">
-<div>
-<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Decadent Millet Fudge Cake</h3>
-<p className="text-xs text-outline mt-0.5 font-label">Sprouted Ragi &amp; Little Millet • Cocoa Ganache • Edible Beads</p>
-</div>
-<span className="font-headline text-lg font-extrabold text-secondary">₹850</span>
-</div>
-<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
-                    Zero white flour, zero refined sugar. A moist, melt-in-the-mouth cocoa sponge layered with rich dark chocolate ganache whipped with pure coconut milk and palm jaggery.
-                  </p>
-</div>
-</div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
-<div className="flex items-center gap-1.5 text-xs text-outline">
-<span className="material-symbols-outlined text-[16px] text-secondary">celebration</span>
-<span className="">Chennai Same-Day Ready</span>
-</div>
-<button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart('Decadent Millet Fudge Cake', 850, '500g Cake')}>
-<span className="material-symbols-outlined text-[16px]">add</span> Add to Order
-                </button>
-</div>
-</article>
-{/* Item 5: Roasted Almond Millet Tea Cake */}
-<article id="almond-cake" className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="cakes" hidden={category !== "all" && category !== "cakes"}>
-<div>
-<div className="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
-<img alt="Roasted Almond Millet Tea Cake" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdWhPze32q3kKSyd9om-NbKVTpab11-c_67uhbytQBmIDHQ9p3K76m1UoxJiF_H9WOg6BkFqrydzzJatsvHa-J413VoLElkUUyI7yC7mT0ELpPX5EYqQEcQEXZ9MUKkqzh6JOV8xOT3-1h1-sd41lI7Qw143t4zKSTrxzhhm196VdXs3UHKaXJqRIwAfjxFyZ8Vzskvb_nGjuxXS51xrWvI_uQuzFj3VxfW0WXzTdpDYY-iVW6Ir4tzXC8o_54gSAhe8A" />
-<div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-surface-container-high text-on-surface-variant tracking-wide">TEA TIME SPECIAL</span>
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-tertiary-fixed text-on-tertiary-fixed tracking-wide">DAIRY-FREE OPTION</span>
-</div>
-<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">450g Loaf</span>
-</div>
-<div className="p-5">
-<div className="flex items-start justify-between gap-2">
-<div>
-<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Roasted Almond Tea Cake</h3>
-<p className="text-xs text-outline mt-0.5 font-label">Foxtail Flour • Crushed California Almonds • Green Cardamom</p>
-</div>
-<span className="font-headline text-lg font-extrabold text-secondary">₹420</span>
-</div>
-<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
-                    A fragrant, naturally golden tea loaf with aromatic crushed cardamom pods, toasted almond slivers, and raw wild honey glaze. Soft, crumbly, and naturally satiating.
-                  </p>
-</div>
-</div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
-<div className="flex items-center gap-1.5 text-xs text-outline">
-<span className="material-symbols-outlined text-[16px] text-tertiary">local_cafe</span>
-<span className="">Perfect with Black Tea</span>
-</div>
-<button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart('Roasted Almond Tea Cake', 420, '450g Loaf')}>
-<span className="material-symbols-outlined text-[16px]">add</span> Add to Order
-                </button>
-</div>
-</article>
-{/* Item 6: Festive & Corporate Wellness Hamper */}
-<article id="corporate-hamper" className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between" data-item-cat="hampers" hidden={category !== "all" && category !== "hampers"}>
-<div>
-<div className="relative overflow-hidden aspect-[4/3] bg-surface-container-high">
-<img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="An elegant, artisanal corporate wellness gift hamper from Millet Bakes containing rustic jars of ancient grain granola, sealed Kraft boxes of ragi cookies, and roasted nut clusters on warm parchment paper. Warm amber sunlight illuminates the textured packaging, burlap ribbons, and hand-stamped wax seals. The colors feature rich cocoa brown, natural kraft tones, and earthy terracotta." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2MzLShL-Gxjfyi8ZWc_SkSUYHOWKnTwVeLStoZVGfSthFnnasd7cTf9HV-TuBNL_sTFujcuK2G0XJD-2_ZAuzNnbRZbd2sJ-GYdkf4Zeu1SFE1EOcuLRpz3bJ79Zrf9xjWK_OpfUNZD1nx-_bSoXPNrc16lKDEMf7MrX7W59lvofBjrAXkQkNWwp-bLw4UzoHU_xxjgnVeWPZLFhVdqE_phABDcw39nEviqCMzXjsfp4aSGms_CEByw" />
-<div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-secondary text-on-secondary tracking-wide">GIFT HAMPER</span>
-<span className="px-2.5 py-0.5 rounded-full text-[10px] font-headline font-bold bg-primary-fixed text-on-primary-fixed tracking-wide">LUXURY PACKAGING</span>
-</div>
-<span className="absolute bottom-3 right-3 bg-surface/90 backdrop-blur-md px-2 py-0.5 rounded text-[11px] font-label font-bold text-primary">Artisan Gift Box</span>
-</div>
-<div className="p-5">
-<div className="flex items-start justify-between gap-2">
-<div>
-<h3 className="font-headline text-lg font-bold text-primary group-hover:text-secondary transition-colors">Corporate Wellness Hamper</h3>
-<p className="text-xs text-outline mt-0.5 font-label">Granola Jar + Ragi Cookies + Herb Crackers + Seed Bar</p>
-</div>
-<span className="font-headline text-lg font-extrabold text-secondary">₹1,250</span>
-</div>
-<p className="text-xs text-on-surface-variant mt-3 leading-relaxed font-body">
-                    A thoughtfully assembled gift experience for employees, clients, or festive family gatherings. Comes in a gold-embossed reusable tin with personalized artisan message cards.
-                  </p>
-</div>
-</div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between">
-<div className="flex items-center gap-1.5 text-xs text-outline">
-<span className="material-symbols-outlined text-[16px] text-tertiary">groups</span>
-<span className="">Bulk Customization</span>
-</div>
-<button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart('Corporate Wellness Hamper', 1250, 'Artisan Gift Box')}>
-<span className="material-symbols-outlined text-[16px]">add</span> Add to Order
-                </button>
-</div>
-</article>
+))}
 </div>
 </section>
 {/* Live Sticky WhatsApp Order Console (4 cols) */}
@@ -373,6 +213,7 @@ export default function ShopPage() {
 <p className="text-xs text-outline py-4 text-center">Your oven basket is currently empty. Add fresh bakes from the left!</p>
 ) : activeItems.map((item) => (
 <div key={item.id} className="cart-row flex items-center justify-between gap-3 text-xs pb-3 border-b border-outline-variant/20">
+<img alt={item.name} className="w-12 h-12 rounded-lg object-cover shrink-0 bg-surface-container" height={48} src={item.image} width={48} />
 <div className="flex-1 min-w-0">
 <div className="font-headline font-semibold text-on-surface truncate">{item.name}</div>
 <div className="text-[11px] text-outline">{formatINR(item.price)} • {item.spec}</div>
@@ -386,25 +227,8 @@ export default function ShopPage() {
 </div>
 ))}
 </div>
-{/* Custom Options: Packaging Selection */}
+{/* Order details */}
 <div className="mt-5 pt-4 border-t border-outline-variant/30 space-y-3">
-<label className="block text-xs font-headline font-bold text-primary">Packaging Choice</label>
-<div className="grid grid-cols-2 gap-2 text-xs">
-<label className="flex items-center gap-2 p-2 rounded-lg border border-secondary/40 bg-secondary-fixed/10 cursor-pointer">
-<input checked={cart.packaging.cost === 0} className="text-secondary focus:ring-secondary" name="packaging" onChange={() => cart.setPackaging("Eco Kraft Box", 0)} type="radio" value="Eco Kraft Box" />
-<div>
-<div className="font-semibold text-primary text-[11px]">Eco Kraft Box</div>
-<div className="text-[10px] text-outline">Included (Free)</div>
-</div>
-</label>
-<label className="flex items-center gap-2 p-2 rounded-lg border border-outline-variant/50 hover:border-secondary/40 cursor-pointer">
-<input checked={cart.packaging.cost === 90} className="text-secondary focus:ring-secondary" name="packaging" onChange={() => cart.setPackaging("Heritage Tin", 90)} type="radio" value="Heritage Tin" />
-<div>
-<div className="font-semibold text-primary text-[11px]">Heritage Tin</div>
-<div className="text-[10px] text-secondary font-bold">+₹90</div>
-</div>
-</label>
-</div>
 {/* Delivery Destination Selector */}
 <div className="pt-2">
 <label className="block text-xs font-headline font-bold text-primary mb-1.5">Phone / WhatsApp <span className="text-error">*</span></label>
@@ -431,16 +255,12 @@ export default function ShopPage() {
 <span className="font-semibold">{formatINR(cart.subtotal)}</span>
 </div>
 <div className="flex justify-between text-on-surface-variant">
-<span className="">Selected Packaging</span>
-<span className="font-semibold">{formatINR(cart.packaging.cost)}</span>
-</div>
-<div className="flex justify-between text-on-surface-variant">
 <span className="">Freshness Packing &amp; Tax</span>
 <span className="text-tertiary font-semibold">FREE</span>
 </div>
 <div className="flex justify-between text-base font-headline font-extrabold text-primary pt-2 border-t border-outline-variant/20">
 <span className="">Estimated Total</span>
-<span className="text-secondary font-extrabold">{formatINR(cart.subtotal + cart.packaging.cost)}</span>
+<span className="text-secondary font-extrabold">{formatINR(cart.subtotal)}</span>
 </div>
 </div>
 {/* WhatsApp Primary CTA Action Button */}

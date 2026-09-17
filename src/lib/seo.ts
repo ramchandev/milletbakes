@@ -21,7 +21,7 @@ import {
 
 export const SITE_KEYWORDS = [
   "millet bakery Chennai",
-  "ragi cookies",
+  "foxtail millet cookies",
   "jaggery bakery",
   "no maida cookies",
   "millet granola",
@@ -69,9 +69,9 @@ export const ROUTES = [
     path: "/shop",
     title: "Shop Millet Cookies, Cakes & Hampers",
     description:
-      "Order ragi cookies, millet granola, tea cakes, and wellness hampers. Same-day Chennai delivery and pan-India courier.",
+      "Order foxtail millet cookies, granola, tea cakes, and wellness hampers. Same-day Chennai delivery and pan-India courier.",
     ogDescription:
-      "Shop ragi cookies, granola, cakes, and hampers. Order on WhatsApp for Chennai delivery.",
+      "Shop foxtail millet cookies, granola, cakes, and hampers. Order on WhatsApp for Chennai delivery.",
     changeFrequency: "weekly" as const,
     priority: 0.9,
   },
@@ -169,7 +169,7 @@ export const SERVICES = [
     summary: "Office tasting sessions that swap ultra-processed 4 PM snacks for millet energy bites.",
   },
   {
-    href: "/shop#corporate-hamper",
+    href: "/corporate",
     name: "Corporate and festive wellness hampers",
     summary: "Branded artisan gift tins for Diwali, New Year, onboarding, and team milestones.",
   },

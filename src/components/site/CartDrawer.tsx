@@ -6,10 +6,10 @@ import { emailLead } from "@/lib/submit-lead-client";
 import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
 
 export function CartDrawer() {
-  const { items, subtotal, packaging, phone, setPhone, drawerOpen, closeDrawer, changeQty } = useCart();
+  const { items, subtotal, phone, setPhone, drawerOpen, closeDrawer, changeQty } = useCart();
   const [sending, setSending] = useState(false);
   const activeItems = items.filter((item) => item.qty > 0);
-  const total = subtotal + packaging.cost;
+  const total = subtotal;
 
   async function checkout() {
     if (activeItems.length === 0) {
@@ -25,7 +25,7 @@ export function CartDrawer() {
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
     const estimated = formatINR(total);
-    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${phone}\n*Packaging:* ${packaging.label} (+${formatINR(packaging.cost)})\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
+    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${phone}\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
 
     setSending(true);
     try {
@@ -35,7 +35,6 @@ export function CartDrawer() {
         fields: {
           Items: lines,
           Phone: phone,
-          Packaging: `${packaging.label} (+${formatINR(packaging.cost)})`,
           "Estimated total": estimated,
         },
       });
@@ -88,17 +87,25 @@ export function CartDrawer() {
                 activeItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex justify-between items-center py-2 border-b border-outline-variant/20"
+                    className="flex items-start gap-3 py-2 border-b border-outline-variant/20"
                   >
-                    <div>
-                      <span className="font-bold text-primary">{item.name}</span>
-                      <div className="text-xs text-on-surface-variant">
+                    <img
+                      alt={item.name}
+                      className="w-14 h-14 rounded-xl object-cover shrink-0 bg-surface-container"
+                      height={56}
+                      src={item.image}
+                      width={56}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <span className="font-bold text-primary block leading-snug">{item.name}</span>
+                      <div className="text-xs text-on-surface-variant mt-0.5">
                         {formatINR(item.price)} x {item.qty}
                       </div>
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           type="button"
-                          className="w-6 h-6 rounded-full bg-surface-container hover:bg-surface-variant"
+                          aria-label={`Decrease ${item.name} quantity`}
+                          className="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-variant"
                           onClick={() => changeQty(item.id, -1)}
                         >
                           -
@@ -106,14 +113,15 @@ export function CartDrawer() {
                         <span className="w-5 text-center font-bold">{item.qty}</span>
                         <button
                           type="button"
-                          className="w-6 h-6 rounded-full bg-primary text-background"
+                          aria-label={`Increase ${item.name} quantity`}
+                          className="w-8 h-8 rounded-full bg-primary text-background"
                           onClick={() => changeQty(item.id, 1)}
                         >
                           +
                         </button>
                       </div>
                     </div>
-                    <span className="font-bold">{formatINR(item.price * item.qty)}</span>
+                    <span className="font-bold shrink-0 pt-1">{formatINR(item.price * item.qty)}</span>
                   </div>
                 ))
               )}

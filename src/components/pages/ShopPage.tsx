@@ -1,18 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { PRODUCTS, formatProductTitle } from "@/lib/catalog";
 import { useCart } from "@/lib/cart-context";
-import { emailLead } from "@/lib/submit-lead-client";
-import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
+import { formatINR } from "@/lib/site";
 
 export default function ShopPage() {
   const cart = useCart();
   const [category, setCategory] = useState("all");
-  const [delivery, setDelivery] = useState("Chennai Express (Same Day / ₹80)");
-  const [notes, setNotes] = useState("");
-  const [sending, setSending] = useState(false);
-  const activeItems = cart.items.filter((item) => item.qty > 0);
   const visibleProducts = PRODUCTS.filter(
     (product) => category === "all" || product.category === category,
   );
@@ -21,42 +17,6 @@ export default function ShopPage() {
   function addToCart(name: string, price: number, spec: string) {
     cart.addItem(name, price, spec);
     cart.openDrawer();
-  }
-
-  async function dispatchWhatsAppOrder() {
-    if (activeItems.length === 0) {
-      window.alert("Your basket is empty. Please select baked treats to proceed!");
-      return;
-    }
-    if (!isValidPhone(cart.phone)) {
-      window.alert("Please enter a valid WhatsApp / phone number.");
-      return;
-    }
-    const lines = activeItems
-      .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
-      .join("\n");
-    const total = formatINR(cart.subtotal);
-    const message = `*NEW ORDER - MILLET BAKES (Website Pantry)*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${cart.phone}\n*Delivery Mode:* ${delivery}${notes ? `\n*Notes/Custom Message:* ${notes}` : ""}\n*Estimated Total:* ${total}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
-
-    setSending(true);
-    try {
-      await emailLead({
-        type: "order",
-        subject: "Website pantry order",
-        fields: {
-          Items: lines,
-          Phone: cart.phone,
-          Delivery: delivery,
-          Notes: notes || "None",
-          "Estimated total": total,
-        },
-      });
-      openWhatsApp(message);
-    } catch (error) {
-      window.alert(error instanceof Error ? error.message : "Could not send the order email. Please try again.");
-    } finally {
-      setSending(false);
-    }
   }
 
   return (
@@ -125,12 +85,9 @@ export default function ShopPage() {
 </div>
 </div>
 </section>
-{/* Catalog & Sticky Cart Split View */}
+{/* Catalog */}
 <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
-{/* Layout: 8 cols catalog, 4 cols live WhatsApp order console */}
-<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-{/* Product Grid Column (8 cols) */}
-<section className="lg:col-span-8">
+<section>
 <div className="flex items-center justify-between pb-6 border-b border-outline-variant/30 mb-6">
 <span className="font-headline font-bold text-base text-on-surface">Displaying {visibleCount} handcrafted creation{visibleCount === 1 ? "" : "s"}</span>
 <div className="flex items-center gap-2 text-xs font-label text-outline">
@@ -142,8 +99,7 @@ export default function ShopPage() {
 </select>
 </div>
 </div>
-{/* The Artisan Bento Grid */}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-6" id="product-grid">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="product-grid">
 {visibleProducts.map((product) => (
 <article key={product.id} id={product.id} className="product-card group bg-surface-container-lowest rounded-xl border border-outline-variant/40 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
 <div>
@@ -189,108 +145,32 @@ export default function ShopPage() {
 </div>
 </article>
 ))}
+{category === "all" ? (
+<div className="bg-primary-container text-background rounded-xl parchment-border p-8 flex flex-col justify-between warm-card-shadow">
+<div>
+<div className="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-6 shadow-sm">
+<span className="material-symbols-outlined">featured_seasonal_and_gifts</span>
+</div>
+<span className="font-label-stamp text-label-stamp text-secondary-fixed uppercase tracking-wider font-bold">Enterprise &amp; Events</span>
+<h3 className="font-headline text-xl md:text-2xl text-white mt-2 font-bold">Custom Hamper &amp; Bulk Orders</h3>
+<p className="font-body text-sm text-amber-100/90 mt-3 leading-relaxed">
+Hosting a corporate wellness seminar or curating wedding favors? We handcraft personalized tins, custom sleeves, and doorstep bulk logistics across India.
+</p>
+<ul className="mt-6 space-y-2.5 text-sm text-white/95">
+<li className="flex items-center gap-2"><span className="material-symbols-outlined text-sm text-secondary-container">check_circle</span> <span>Custom brand embossed seals</span></li>
+<li className="flex items-center gap-2"><span className="material-symbols-outlined text-sm text-secondary-container">check_circle</span> <span>Volume pricing for 25+ units</span></li>
+<li className="flex items-center gap-2"><span className="material-symbols-outlined text-sm text-secondary-container">check_circle</span> <span>Certified batch lab reports available</span></li>
+</ul>
+</div>
+<div className="pt-8">
+<Link className="w-full block text-center px-6 py-3.5 rounded-full bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-container transition font-label text-sm font-bold shadow-md hover:scale-105 active:scale-95" href="/corporate">
+Enquire for Corporate Gifting
+</Link>
+</div>
+</div>
+) : null}
 </div>
 </section>
-{/* Live Sticky WhatsApp Order Console (4 cols) */}
-<aside className="lg:col-span-4 sticky top-28 space-y-6">
-<div className="bg-surface-container-lowest rounded-2xl border-2 border-primary/15 p-6 shadow-md relative overflow-hidden">
-{/* Header Stamp */}
-<div className="flex items-center justify-between border-b border-outline-variant/30 pb-4 mb-5">
-<div className="flex items-center gap-2.5">
-<div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
-<span className="material-symbols-outlined text-base">shopping_bag</span>
-</div>
-<div>
-<h2 className="font-headline font-bold text-base text-primary">Your Oven Basket</h2>
-<p className="text-[11px] text-outline font-label">Direct Baker Dispatch • Chennai</p>
-</div>
-</div>
-<span className="text-xs font-headline font-bold bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded-full">{cart.itemCount} item{cart.itemCount === 1 ? "" : "s"}</span>
-</div>
-{/* Item Summary List */}
-<div className="space-y-3.5 max-h-60 overflow-y-auto pr-1">
-{activeItems.length === 0 ? (
-<p className="text-xs text-outline py-4 text-center">Your oven basket is currently empty. Add fresh bakes from the left!</p>
-) : activeItems.map((item) => (
-<div key={item.id} className="cart-row flex items-center justify-between gap-3 text-xs pb-3 border-b border-outline-variant/20">
-<img alt={item.name} className="w-12 h-12 rounded-lg object-cover shrink-0 bg-surface-container" height={48} src={item.image} width={48} />
-<div className="flex-1 min-w-0">
-<div className="font-headline font-semibold text-on-surface truncate">{item.name}</div>
-<div className="text-[11px] text-outline">{formatINR(item.price)} • {item.spec}</div>
-</div>
-<div className="flex items-center border border-outline-variant/60 rounded-full bg-surface-container">
-<button type="button" onClick={() => cart.changeQty(item.id, -1)} className="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold">-</button>
-<span className="qty-display w-6 text-center font-bold text-xs">{item.qty}</span>
-<button type="button" onClick={() => cart.changeQty(item.id, 1)} className="w-6 h-6 flex items-center justify-center text-on-surface hover:text-secondary font-bold">+</button>
-</div>
-<span className="font-bold text-primary w-12 text-right">{formatINR(item.price * item.qty)}</span>
-</div>
-))}
-</div>
-{/* Order details */}
-<div className="mt-5 pt-4 border-t border-outline-variant/30 space-y-3">
-{/* Delivery Destination Selector */}
-<div className="pt-2">
-<label className="block text-xs font-headline font-bold text-primary mb-1.5">Phone / WhatsApp <span className="text-error">*</span></label>
-<input className="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0 placeholder:text-outline/70" inputMode="tel" placeholder="+91 98765 43210" required type="tel" value={cart.phone} onChange={(event) => cart.setPhone(event.target.value)} />
-</div>
-<div className="pt-2">
-<label className="block text-xs font-headline font-bold text-primary mb-1.5">Delivery Destination</label>
-<select className="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0" value={delivery} onChange={(event) => setDelivery(event.target.value)}>
-<option value="Chennai Express (Same Day / ₹80)">Chennai Local Express (Same-Day / Next-Day)</option>
-<option value="Pan-India Standard Courier (₹120)">Pan-India Secure Air Courier (2-3 Days)</option>
-<option value="Self-Pickup from Chennai Bakehouse (Free)">Self-Pickup from Kodambakkam Studio (Free)</option>
-</select>
-</div>
-{/* Custom Note Input */}
-<div className="pt-1">
-<label className="block text-xs font-headline font-bold text-primary mb-1">Custom Note / Dietary Instruction</label>
-<textarea className="w-full text-xs font-body border border-outline-variant/60 rounded-lg p-2 bg-surface text-on-surface focus:border-secondary focus:ring-0 resize-none placeholder:text-outline/70" placeholder="e.g. Please write 'Happy Birthday Appa!' on cake card. Extra crunchy cookies if possible." rows={2} value={notes} onChange={(event) => setNotes(event.target.value)} />
-</div>
-</div>
-{/* Price Breakdown Calculation */}
-<div className="mt-4 pt-4 border-t border-outline-variant/30 space-y-1.5 text-xs">
-<div className="flex justify-between text-on-surface-variant">
-<span className="">Items Subtotal</span>
-<span className="font-semibold">{formatINR(cart.subtotal)}</span>
-</div>
-<div className="flex justify-between text-on-surface-variant">
-<span className="">Freshness Packing &amp; Tax</span>
-<span className="text-tertiary font-semibold">FREE</span>
-</div>
-<div className="flex justify-between text-base font-headline font-extrabold text-primary pt-2 border-t border-outline-variant/20">
-<span className="">Estimated Total</span>
-<span className="text-secondary font-extrabold">{formatINR(cart.subtotal)}</span>
-</div>
-</div>
-{/* WhatsApp Primary CTA Action Button */}
-<button className="w-full mt-5 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-4 rounded-full font-label font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md active:scale-98 group disabled:opacity-60 disabled:cursor-not-allowed" disabled={sending || !isValidPhone(cart.phone) || activeItems.length === 0} onClick={() => dispatchWhatsAppOrder()}>
-<span className="material-symbols-outlined text-[20px] text-tertiary-fixed group-hover:scale-110 transition-transform">chat</span>
-<span className="">{sending ? "Sending…" : "Complete Order via WhatsApp"}</span>
-</button>
-{!isValidPhone(cart.phone) ? (
-<p className="text-[10px] text-center text-secondary mt-2 font-body">Enter a valid phone number to complete the order.</p>
-) : null}
-<p className="text-[10px] text-center text-outline mt-2 font-body">Instant baker confirmation • Direct UPI payment via WhatsApp</p>
-{/* Baker Support Direct Contact */}
-<div className="mt-4 p-2.5 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-center gap-2 text-[11px] text-on-surface-variant">
-<span className="material-symbols-outlined text-secondary text-base">support_agent</span>
-<span className="">Questions? Call or message Santhiya at <a className="font-bold underline text-primary" href="tel:+916383100431">+91 63831 00431</a></span>
-</div>
-</div>
-{/* Artisan Quality Seal Block */}
-<div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/30 flex items-center gap-4">
-<div className="w-16 h-16 shrink-0 rounded-full border-2 border-dashed border-secondary flex flex-col items-center justify-center text-center p-1 bg-surface">
-<span className="material-symbols-outlined text-secondary text-base">bakery_dining</span>
-<span className="font-headline text-[7px] font-extrabold uppercase leading-none tracking-tighter text-primary">CHENNAI BAKE</span>
-</div>
-<div>
-<h3 className="font-headline font-bold text-xs text-primary">Made to Order Everyday</h3>
-<p className="text-[11px] text-on-surface-variant mt-1 leading-snug">We never hold shelf stock. Your cakes and cookies enter the oven only after order verification.</p>
-</div>
-</div>
-</aside>
-</div>
 </div>
 {/* Wholesome Value & Transparency Pillars */}
 <section className="bg-surface-container-low border-y border-outline-variant/30 py-16">

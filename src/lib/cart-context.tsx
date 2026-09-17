@@ -23,6 +23,8 @@ type CartContextValue = {
   changeQty: (id: string, delta: number) => void;
   phone: string;
   setPhone: (phone: string) => void;
+  notes: string;
+  setNotes: (notes: string) => void;
   drawerOpen: boolean;
   openDrawer: () => void;
   closeDrawer: () => void;
@@ -38,6 +40,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     cost: 0,
   });
   const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const addItem = useCallback((name: string, price?: number, spec?: string, qty = 1) => {
@@ -95,12 +98,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       changeQty,
       phone,
       setPhone,
+      notes,
+      setNotes,
       drawerOpen,
       openDrawer: () => setDrawerOpen(true),
       closeDrawer: () => setDrawerOpen(false),
       toggleDrawer: () => setDrawerOpen((open) => !open),
     };
-  }, [addItem, changeQty, drawerOpen, items, packaging, phone, setQty]);
+  }, [addItem, changeQty, drawerOpen, items, notes, packaging, phone, setQty]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

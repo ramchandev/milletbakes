@@ -6,7 +6,7 @@ import { emailLead } from "@/lib/submit-lead-client";
 import { formatINR, isValidPhone, openWhatsApp } from "@/lib/site";
 
 export function CartDrawer() {
-  const { items, subtotal, phone, setPhone, drawerOpen, closeDrawer, changeQty } = useCart();
+  const { items, subtotal, phone, setPhone, notes, setNotes, drawerOpen, closeDrawer, changeQty } = useCart();
   const [sending, setSending] = useState(false);
   const activeItems = items.filter((item) => item.qty > 0);
   const total = subtotal;
@@ -25,7 +25,7 @@ export function CartDrawer() {
       .map((item, index) => `${index + 1}. ${item.name} (${item.spec}) x ${item.qty} = ${formatINR(item.price * item.qty)}`)
       .join("\n");
     const estimated = formatINR(total);
-    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${phone}\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
+    const message = `*NEW ORDER - MILLET BAKES*\n\n*Items Ordered:*\n${lines}\n\n*Phone / WhatsApp:* ${phone}${notes.trim() ? `\n*Notes/Custom Message:* ${notes.trim()}` : ""}\n*Estimated Total:* ${estimated}\n\nKindly confirm dispatch slot & share payment QR code. Thank you!`;
 
     setSending(true);
     try {
@@ -35,6 +35,7 @@ export function CartDrawer() {
         fields: {
           Items: lines,
           Phone: phone,
+          Notes: notes.trim() || "None",
           "Estimated total": estimated,
         },
       });
@@ -78,7 +79,7 @@ export function CartDrawer() {
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            <div className="py-6 space-y-4 font-body-sm text-body-sm max-h-[614px] overflow-y-auto">
+            <div className="py-6 space-y-4 font-body-sm text-body-sm max-h-[360px] overflow-y-auto">
               {activeItems.length === 0 ? (
                 <p className="text-xs text-outline py-4 text-center">
                   Your oven basket is currently empty. Add fresh bakes from the menu!
@@ -133,15 +134,27 @@ export function CartDrawer() {
               <span className="font-bold text-xl">{formatINR(total)}</span>
             </div>
             <div>
-              <label className="block font-label-md text-label-md text-primary mb-1">Phone / WhatsApp <span className="text-error">*</span></label>
+              <label className="block font-label-md text-label-md text-primary mb-1" htmlFor="cart-phone">Phone / WhatsApp <span className="text-error">*</span></label>
               <input
                 className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm"
+                id="cart-phone"
                 inputMode="tel"
                 placeholder="+91 98765 43210"
                 required
                 type="tel"
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block font-label-md text-label-md text-primary mb-1" htmlFor="cart-notes">Custom Note / Dietary Instruction</label>
+              <textarea
+                className="w-full rounded-xl border border-outline-variant/60 focus:border-secondary focus:ring-2 focus:ring-secondary/20 p-3 bg-surface-container-lowest font-body-sm text-body-sm resize-none placeholder:text-outline/70"
+                id="cart-notes"
+                placeholder="e.g. Please write 'Happy Birthday Appa!' on cake card. Extra crunchy cookies if possible."
+                rows={3}
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
               />
             </div>
             <button

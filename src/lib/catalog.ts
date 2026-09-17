@@ -68,7 +68,7 @@ export const PRODUCTS: Product[] = [
     subtitle: "Crunchy • Nutritious • Wholesome",
     description:
       "A crunchy everyday granola made with wholesome millet grains, rolled oats, almonds, seeds, raisins, and coconut. Packed with real nutrition for sustained energy, this jar is rich in fibre and nutrients, made with 100% natural ingredients, and completely sugar-free — clean snacking that is perfect for all ages.",
-    image: "/products/millet-granola.jpg",
+    image: "/products/millet-granola.png",
     tags: ["Sugar Free", "High Fiber"],
     highlights: [
       "Made with 100% natural ingredients",

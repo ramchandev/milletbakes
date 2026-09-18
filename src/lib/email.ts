@@ -43,6 +43,20 @@ function renderHtml(subject: string, fields: Record<string, string>) {
 </body></html>`;
 }
 
+function uniqueOrderSubject(base: string) {
+  const stamp = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(new Date());
+  return `${base} — ${stamp} IST`;
+}
+
 export async function sendLeadEmail(payload: LeadPayload) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;
@@ -52,14 +66,21 @@ export async function sendLeadEmail(payload: LeadPayload) {
     throw new Error("Email is not configured. Add RESEND_API_KEY, RESEND_FROM_EMAIL, and RESEND_TO_EMAIL.");
   }
 
+  const subject =
+    payload.type === "order" ? uniqueOrderSubject(payload.subject) : payload.subject;
+
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
     from,
     to,
     replyTo: payload.replyTo || undefined,
-    subject: payload.subject,
+    subject,
     text: renderText(payload.fields),
-    html: renderHtml(payload.subject, payload.fields),
+    html: renderHtml(subject, payload.fields),
+    headers:
+      payload.type === "order"
+        ? { "X-Entity-Ref-ID": crypto.randomUUID() }
+        : undefined,
   });
 
   if (error) {

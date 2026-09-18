@@ -29,7 +29,7 @@ export function SiteHeader() {
             </span>
           </div>
         </Link>
-        <div className="hidden md:flex items-center gap-8 font-medium text-sm text-on-surface-variant">
+        <div className="hidden md:flex items-center gap-5 lg:gap-8 font-medium text-sm text-on-surface-variant">
           {NAV_LINKS.map((link) => {
             const active = pathname === link.href;
             return (

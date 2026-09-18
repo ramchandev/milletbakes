@@ -34,7 +34,8 @@ Millet Bakes is a small-batch bakery studio in Ayanavaram, Chennai, Tamil Nadu 6
 ## Pages
 
 - [Home](/): featured bakes, hamper builder, and WhatsApp checkout
-- [Shop & Order](/shop): full menu, packaging, delivery, sticky basket
+- [Shop & Order](/shop): full menu and WhatsApp checkout
+- [Gallery](/gallery): bakery photos and Instagram feed from @millet_bakes
 - [Corporate Workshops](/corporate): team baking experiences and gifting
 - [Our Story](/our-story): founder story and ingredient philosophy
 - [Contact](/contact): studio details, inquiry form, FAQ

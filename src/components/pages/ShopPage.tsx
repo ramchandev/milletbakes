@@ -146,7 +146,9 @@ export default function ShopPage() {
 </article>
 ))}
 {category === "all" ? (
-<div className="bg-primary-container text-background rounded-xl parchment-border p-8 flex flex-col justify-between warm-card-shadow">
+<div className="bg-primary-container text-background rounded-xl parchment-border overflow-hidden flex flex-col justify-between warm-card-shadow">
+<img alt="Millet Bakes custom hamper with brownies, granola, and gifting tins" className="w-full h-52 object-cover" src="/custom-hamper.jpg" />
+<div className="p-8 flex flex-col flex-grow justify-between">
 <div>
 <div className="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-6 shadow-sm">
 <span className="material-symbols-outlined">featured_seasonal_and_gifts</span>
@@ -166,6 +168,7 @@ Hosting a corporate wellness seminar or curating wedding favors? We handcraft pe
 <Link className="w-full block text-center px-6 py-3.5 rounded-full bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-container transition font-label text-sm font-bold shadow-md hover:scale-105 active:scale-95" href="/corporate">
 Enquire for Corporate Gifting
 </Link>
+</div>
 </div>
 </div>
 ) : null}

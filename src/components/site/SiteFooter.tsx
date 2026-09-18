@@ -40,6 +40,9 @@ export function SiteFooter() {
               <Link className="text-on-primary-container/80 hover:text-primary-fixed transition-colors duration-200" href="/shop">
                 Shop &amp; Order
               </Link>
+              <Link className="text-on-primary-container/80 hover:text-primary-fixed transition-colors duration-200" href="/gallery">
+                Gallery
+              </Link>
               <Link className="text-on-primary-container/80 hover:text-primary-fixed transition-colors duration-200" href="/our-story">
                 Our Story
               </Link>
@@ -100,7 +103,7 @@ export function SiteFooter() {
               referrerPolicy="no-referrer"
               target="_blank"
             >
-              Bizysite
+              Bizy Site
             </a>
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">

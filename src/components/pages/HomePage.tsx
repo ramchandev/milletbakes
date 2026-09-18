@@ -26,8 +26,8 @@ export default function HomePage() {
 {/* TOP APP BAR */}
 
 {/* HERO SECTION */}
-<section className="relative overflow-hidden pt-8 pb-16 md:pt-14 md:pb-24 border-b border-outline-variant/30" id="hero">
-<div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<section className="relative overflow-hidden pt-8 pb-10 md:pt-12 md:pb-14" id="hero">
+<div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-stretch">
 {/* Text & Brand Messaging */}
 <div className="lg:col-span-7 flex flex-col items-start gap-6">
 {/* Artisan Seal & Micro Stamp */}
@@ -72,45 +72,28 @@ export default function HomePage() {
 <span className="">Order Now (WhatsApp)</span>
 </a>
 </div>
-{/* Fresh Batch Ticker */}
-<div className="mt-4 flex items-center gap-3 text-on-surface-variant font-label-md text-label-md">
-<span className="inline-block w-2.5 h-2.5 rounded-full bg-green-600 animate-ping"></span>
-<span className="">Next Fresh Stone-Oven Batch Dispatches: <strong>Today, 4:00 PM (Chennai Express)</strong></span>
-</div>
 </div>
 {/* Hero Visual Composition with Provided Assets */}
-<div className="lg:col-span-5 relative">
-<div className="relative mx-auto max-w-md lg:max-w-none">
-{/* Main Hero Image Showcase */}
-<div className="relative rounded-3xl overflow-hidden bg-surface-container-low parchment-border p-4 warm-card-shadow">
-<img alt="Millet Bakes Artisan Quality Seal and Handcrafted Loaf Collection" className="w-full h-[420px] object-contain rounded-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC25ZQR1UFdiB5rHHntlnA7FMDbkZHFetPwl10PAENTkpMqeSviW5ZxrtsXU5MUsdGK0rD0BFoIsSiNdEru3YHlWIf55WrkW50nZPX9ebkORgVEWQPMyS2DbbGSy_jAgDgzFq7nM91_9OvrNgj2bTy0CFE3tNlK_rL8gmv9LhqQwDYcrPYRVNnmtbFcKe0bqvRTEr88bDuJ5bNbIPeHce_VZMea5siFX1Q4lX8m8UzpOwpFfR_9k7blMkhJltgtcDOhFvU" />
-{/* Stamped Overlaid Quality Badge */}
-<div className="absolute bottom-8 left-8 bg-surface-container-lowest/95 backdrop-blur-sm p-4 rounded-2xl parchment-border warm-card-shadow max-w-[240px]">
-<div className="flex items-center gap-2">
-<span className="material-symbols-outlined text-secondary" data-icon="verified">verified</span>
-<span className="font-title-lg text-sm text-primary">Stoneground Purity</span>
-</div>
-<p className="font-body-sm text-body-sm text-on-surface-variant mt-1">Crushed country palm jaggery, pure cocoa, and naturally nutrient-dense millets.</p>
-</div>
-<div className="absolute -top-3 -right-3 bg-secondary text-on-secondary px-4 py-2 rounded-full font-label-stamp text-label-stamp tracking-wider uppercase shadow-md rotate-3">
-              Direct from Chennai Oven
-            </div>
+<div className="lg:col-span-5">
+<div className="relative h-full min-h-[280px] sm:min-h-[360px] rounded-3xl overflow-hidden parchment-border p-2 md:p-3 warm-card-shadow">
+<div className="relative h-full w-full min-h-[264px] sm:min-h-[336px] rounded-2xl overflow-hidden">
+<img alt="Santhiya Karthikeyan serving a tray of freshly baked millet cookies" className="absolute inset-0 w-full h-full object-cover" src="/hero-sadhya.jpg" />
 </div>
 </div>
 </div>
 </div>
 </section>
 {/* DAILY BAKE STRIP TICKER */}
-<section className="bg-surface-container-high py-4 border-b border-outline-variant/30">
-<div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap items-center justify-between gap-4 text-primary">
-<div className="flex items-center gap-3">
-<span className="font-label-stamp text-label-stamp uppercase tracking-widest text-secondary font-extrabold">DAILY HARVEST BAKE</span>
-<span className="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
-<span className="font-body-sm text-body-sm font-semibold">Sprouted Ragi Flour • Foxtail Millet • Organic Palm Sugar • Coldpressed Oils</span>
+<section className="bg-surface-container-high py-2 border-y border-outline-variant/30">
+<div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between gap-6 text-primary overflow-x-auto no-scrollbar">
+<div className="flex items-center gap-3 whitespace-nowrap">
+<span className="font-label-stamp text-label-stamp uppercase tracking-widest text-secondary font-extrabold leading-none">DAILY HARVEST BAKE</span>
+<span className="w-1.5 h-1.5 rounded-full bg-outline-variant shrink-0"></span>
+<span className="font-body-sm text-body-sm font-semibold leading-none">Sprouted Ragi Flour • Foxtail Millet • Organic Palm Sugar • Coldpressed Oils</span>
 </div>
-<div className="flex items-center gap-6 font-label-md text-label-md">
-<span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-secondary" data-icon="local_shipping">local_shipping</span> Chennai Next-Day Delivery</span>
-<span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm text-secondary" data-icon="inventory_2">inventory_2</span> Eco-Friendly Glass &amp; Kraft Tins</span>
+<div className="flex items-center gap-5 font-label-md text-label-md whitespace-nowrap shrink-0">
+<span className="flex items-center gap-1.5 leading-none"><span className="material-symbols-outlined !text-[16px] !leading-none text-secondary" data-icon="local_shipping">local_shipping</span> Chennai Next-Day Delivery</span>
+<span className="flex items-center gap-1.5 leading-none"><span className="material-symbols-outlined !text-[16px] !leading-none text-secondary" data-icon="inventory_2">inventory_2</span> Eco-Friendly Glass &amp; Kraft Tins</span>
 </div>
 </div>
 </section>
@@ -173,7 +156,10 @@ export default function HomePage() {
 </div>
 ))}
 {/* Custom Hamper CTA */}
-<div className={`${filter === "All Delights" ? "" : "hidden "}bg-primary-container text-background rounded-2xl parchment-border p-8 flex flex-col justify-between warm-card-shadow`}><div className="">
+<div className={`${filter === "All Delights" ? "" : "hidden "}bg-primary-container text-background rounded-2xl parchment-border overflow-hidden flex flex-col justify-between warm-card-shadow`}>
+<img alt="Millet Bakes custom hamper with brownies, granola, and gifting tins" className="w-full h-52 object-cover" src="/custom-hamper.jpg" />
+<div className="p-8 flex flex-col flex-grow justify-between">
+<div className="">
 <div className="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-6 shadow-sm">
 <span className="material-symbols-outlined" data-icon="featured_seasonal_and_gifts">featured_seasonal_and_gifts</span>
 </div>
@@ -192,6 +178,7 @@ export default function HomePage() {
 <Link className="w-full block text-center px-6 py-3.5 rounded-full bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-container transition font-label-md text-label-md font-bold shadow-md hover:scale-105 active:scale-95" href="/corporate">
             Enquire for Corporate Gifting
           </Link>
+</div>
 </div></div>
 </div>
 </section>

@@ -142,6 +142,21 @@ body {
   color: #1c1c18;
 }
 
+button,
+[type="button"],
+[type="submit"],
+[role="button"],
+select,
+summary {
+  cursor: pointer !important;
+}
+
+button:disabled,
+[type="button"]:disabled,
+[type="submit"]:disabled {
+  cursor: not-allowed !important;
+}
+
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined";
   font-weight: normal;

@@ -14,7 +14,7 @@ export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 export const HEADER_WHATSAPP_MESSAGE =
   "Hi, I saw your products in milletbakes.in, I would like to place order, Can you help with that?\n-Thanks";
 export const HEADER_WHATSAPP_HREF = `${WHATSAPP_URL}?text=${encodeURIComponent(HEADER_WHATSAPP_MESSAGE)}`;
-export const INSTAGRAM_URL = "https://instagram.com/millet_bakes";
+export const INSTAGRAM_URL = "https://www.instagram.com/millet_bakes";
 export const BIZYSITE_URL = "https://www.bizysite.in";
 export const INSTAGRAM_HANDLE = "@millet_bakes";
 export const PHONE_DISPLAY = "+91 63831 00431";
@@ -37,6 +37,7 @@ export const LOGO_SRC =
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop & Order" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/corporate", label: "Corporate Workshops" },
   { href: "/our-story", label: "Our Story" },
   { href: "/contact", label: "Contact" },

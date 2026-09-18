@@ -106,13 +106,13 @@ export default function CorporatePage() {
 {/* Quick Trust Metric */}
 <div className="pt-4 border-t border-outline-variant/30 flex items-center gap-6 text-on-surface-variant">
 <div>
-<span className="font-headline-md text-headline-md text-primary font-bold block">50+</span>
-<span className="font-label-md text-label-md">Corporate Clients</span>
+<span className="font-headline-md text-headline-md text-primary font-bold block">Sugar Free</span>
+<span className="font-label-md text-label-md">No refined sugar</span>
 </div>
 <div className="w-px h-10 bg-outline-variant/40"></div>
 <div>
-<span className="font-headline-md text-headline-md text-primary font-bold block">2,500+</span>
-<span className="font-label-md text-label-md">Participants</span>
+<span className="font-headline-md text-headline-md text-primary font-bold block">DIY Kit</span>
+<span className="font-label-md text-label-md">Take-home bake kit</span>
 </div>
 <div className="w-px h-10 bg-outline-variant/40"></div>
 <div>
@@ -134,7 +134,7 @@ export default function CorporatePage() {
 </div>
 {/* Main Showcase Image: Corporate Event & Tasting table */}
 <div className="overflow-hidden rounded-xl bg-surface-container relative group">
-<img className="w-full h-80 md:h-[420px] object-cover transition-transform duration-500 group-hover:scale-105" alt="A lively and vibrant corporate wellness baking workshop scene hosted by Millet Bakes. Indian corporate employees and professionals smile while engaging in hands-on organic grain pastry prep around rustic wooden counters. The setup is styled with terracotta bowls, golden jaggery powder, roasted millet snacks, and elegant eco-friendly presentation boxes in warm natural sunlight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADm50eq_4x8Wffjd7hfnJyguAvG3N--MGDKOzLDge45Enz-eWEUOSd7_a5Oo-Se_pzZswa12y2mc1fpPSXvM532vwcvfEnmnVkdlvmk_Kgtglx3VsjOorvtB8WppmMQiNLP8A45zERnnPB3v5QETv0iW0cGWvImJtnZZDej6Yqy_ah7cz7XtpWwD5YFUKvUwCaZSaXvZ9Is7jnlrihlxbG-WybQI6L-zPkIEVQHn_JO0SDKwIdWfGuUQ" />
+<img className="w-full h-80 md:h-[420px] object-cover object-center transition-transform duration-500 group-hover:scale-105" alt="Indian office baking workshop: a Chennai team around a conference table decorating millet cookies and packing snack boxes." src="/corporate-workshop-hero.jpg" />
 {/* Floating Artisan Seal Badge */}
 <div className="absolute bottom-4 right-4 bg-surface-container-lowest/95 backdrop-blur-md px-4 py-3 rounded-xl border border-outline-variant/30 shadow-md flex items-center gap-3">
 <div className="w-10 h-10 rounded-full bg-primary-container text-primary-fixed flex items-center justify-center font-bold text-lg">
@@ -299,8 +299,7 @@ export default function CorporatePage() {
       {/* Step 01 */}
       <div className="relative bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/40 flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(58,29,19,0.08)] transition-all group">
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <span className="w-10 h-10 rounded-full bg-secondary-fixed text-secondary font-display font-extrabold flex items-center justify-center text-sm">01</span>
+          <div className="flex items-center justify-end mb-4">
             <span className="px-2.5 py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">15 Mins</span>
           </div>
           <div className="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary mb-3">
@@ -319,8 +318,7 @@ export default function CorporatePage() {
       {/* Step 02 */}
       <div className="relative bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/40 flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(58,29,19,0.08)] transition-all group">
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <span className="w-10 h-10 rounded-full bg-tertiary-fixed text-tertiary-container font-display font-extrabold flex items-center justify-center text-sm">02</span>
+          <div className="flex items-center justify-end mb-4">
             <span className="px-2.5 py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">45 Mins</span>
           </div>
           <div className="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-[#4E6E58] mb-3">
@@ -339,8 +337,7 @@ export default function CorporatePage() {
       {/* Step 03 */}
       <div className="relative bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/40 flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(58,29,19,0.08)] transition-all group">
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <span className="w-10 h-10 rounded-full bg-secondary-container/60 text-secondary font-display font-extrabold flex items-center justify-center text-sm">03</span>
+          <div className="flex items-center justify-end mb-4">
             <span className="px-2.5 py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">45 Mins</span>
           </div>
           <div className="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary mb-3">
@@ -359,8 +356,7 @@ export default function CorporatePage() {
       {/* Step 04 */}
       <div className="relative bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/40 flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(58,29,19,0.08)] transition-all group">
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <span className="w-10 h-10 rounded-full bg-primary-fixed text-primary font-display font-extrabold flex items-center justify-center text-sm">04</span>
+          <div className="flex items-center justify-end mb-4">
             <span className="px-2.5 py-1 rounded-full bg-surface-container font-label-md text-label-md text-on-surface-variant">30 Mins</span>
           </div>
           <div className="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary mb-3">
@@ -526,14 +522,14 @@ export default function CorporatePage() {
 </div>
 {/* Photo Highlight 1 */}
 <div className="relative rounded-xl overflow-hidden h-48 border border-outline-variant/30 group">
-<img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Close up artisanal corporate gift hamper box by Millet Bakes featuring golden foil labels, packed with glass jars of ancient grain seed trail mix, hand-wrapped ragi cookies, and a custom wellness greeting card on warm burlap parchment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtqVuoBre3IjwV1XKyaHchcjGA1qot681tJWHA6V81IQq_L7BGyMnQVt6F1C8nCkFPSxaC7Shw0eyT-Hxn_RUWqdeckoo6HnLNGCSeYWj6dnKlpYvVwAQq_3GybtFV2fmnckfgTDJs7rSR-MxKHcsVGmPWmqSHs-YiNhWovgOoBRvkN387KjOtBtNS23lrBBartzEaKy12maIXxDbtdzVZRpbij12uSINg0UnS84_qpUbSioro2f3xXQ" />
+<img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Millet Bakes custom hamper with brownies, granola, and gifting tins for corporate teams." src="/custom-hamper.jpg" />
 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-4">
 <span className="text-on-primary font-label-md text-label-md">Custom Client Hampers</span>
 </div>
 </div>
 {/* Photo Highlight 2 */}
 <div className="relative rounded-xl overflow-hidden h-48 border border-outline-variant/30 group">
-<img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Corporate workshop room with diverse employees in baking aprons cheerfully holding up freshly baked millet muffins and artisanal bread loaves, laughing together during a team building activity under warm ambient indoor lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrmuK98B8I6OBe1Oesc4E1T9VcVdg98BKD9hDM1d2CxC46mCoaNrT2oQ4XD_Ib9B4BtBmPaKF972T7PHyoAJZjJt5yXWjd3a6pc8gcmH28ONencvBpWuf9CI3aKfN4LtUcW4khLDx2hvehy9grQ5WzYYFowkuOgVkdcwCREQneEgwvuwZR3BPLfybO8iV5-3LeMkPC3iHePiUFnjRr7pxwgZ0I8HnjAX3dHjKi7F8gAYqYl47Pbuu3ug" />
+<img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Handmade millet cookies from a Millet Bakes team baking session in Chennai." src="/gallery/handmade-cookies.jpg" />
 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-4">
 <span className="text-on-primary font-label-md text-label-md">Interactive Team Sessions</span>
 </div>

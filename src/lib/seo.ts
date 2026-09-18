@@ -76,6 +76,16 @@ export const ROUTES = [
     priority: 0.9,
   },
   {
+    path: "/gallery",
+    title: "Photo Gallery & Instagram",
+    description:
+      "See Millet Bakes cookies, granola, cakes, and hampers, plus the latest Instagram posts from @millet_bakes.",
+    ogDescription:
+      "Bakery photos and Instagram from Millet Bakes in Chennai.",
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  },
+  {
     path: "/corporate",
     title: "Corporate Workshops & Wellness Gifting",
     description:

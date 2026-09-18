@@ -134,12 +134,12 @@ export default function ShopPage() {
 ) : null}
 </div>
 </div>
-<div className="p-5 pt-0 border-t border-outline-variant/20 mt-4 flex items-center justify-between gap-2">
-<div className="flex items-center gap-1.5 text-xs text-outline min-w-0">
-<span className="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
-<span className="truncate">{product.highlights?.[0] || "Freshly baked with care"}</span>
-</div>
-<button type="button" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95 shrink-0" onClick={() => addToCart(product.name, product.price, product.spec)}>
+<div className="p-5 pt-4 mt-auto border-t border-outline-variant/20 flex flex-col gap-3">
+<p className="flex items-start gap-2 text-xs text-outline leading-snug">
+<span className="material-symbols-outlined text-[16px] text-tertiary shrink-0 mt-px">check_circle</span>
+<span>{product.highlights?.[0] || "Freshly baked with care"}</span>
+</p>
+<button type="button" className="inline-flex w-full min-h-11 items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-primary text-on-primary hover:bg-secondary transition-colors text-xs font-label font-bold shadow-sm active:scale-95" onClick={() => addToCart(product.name, product.price, product.spec)}>
 <span className="material-symbols-outlined text-[16px]">add</span> Add to Order
 </button>
 </div>
